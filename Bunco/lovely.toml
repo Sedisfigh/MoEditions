@@ -1,0 +1,114 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Glitter edition 1/2
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if effects[ii].edition then'
+position = 'after'
+match_indent = true
+payload = '''
+
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.bunc_glitter then
+    local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' '..global_bunco.loc.chips,
+    edition = true,
+    x_chips = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.bunc_shinygalvanized then
+    hand_chips = mod_chips(hand_chips + 100000)
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.bunc_shinygalvanized then
+    mult = mod_mult(mult * 9)
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.bunc_burnt then
+    hand_chips = mod_chips(hand_chips * 0.5)
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.bunc_burnt then
+    mult = mod_mult(mult * 2)
+end
+'''
+# Glitter edition 2/2
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if edition_effects.jokers.x_mult_mod then'
+position = 'before'
+match_indent = true
+payload = '''
+
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.bunc_glitter then
+    local xchips = G.P_CENTERS.e_bunc_glitter.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' '..global_bunco.loc.chips,
+    edition = true,
+    x_chips = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.bunc_shinygalvanized then
+    hand_chips = mod_chips(hand_chips + 100000)
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.bunc_shinygalvanized then
+    mult = mod_mult(mult * 9)
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.bunc_burnt then
+    hand_chips = mod_chips(hand_chips * 0.5)
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.bunc_burnt then
+    mult = mod_mult(mult * 2)
+end
+'''
+
+# Fluorescent edition 1/3
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if self.facing == 'front' then"
+position = 'after'
+match_indent = true
+payload = '''
+
+if (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and self.edition and self.edition.bunc_fluorescent then
+    return
+end
+'''
+
+
+# Fluorescent edition 2/3
+[[patches]]
+[patches.pattern]
+target = 'cardarea.lua'
+pattern = "function CardArea:remove_from_highlighted(card, force)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if card.edition and card.edition.bunc_fluorescent then
+    card.ability.forced_selection = false
+end
+'''
+
+# Fluorescent edition 3/3
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "function Card:set_debuff(should_debuff)"
+position = 'after'
+match_indent = true
+payload = '''
+
+if self.edition and self.edition.bunc_fluorescent then
+    if self.debuff then
+        self.debuff = false
+        if self.area == G.jokers then self:add_to_deck(true) end
+    end
+    return
+end
+'''
