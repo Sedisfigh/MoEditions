@@ -1,0 +1,44 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# 3-layer drawing for Gateway
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.config.center.soul_pos and (self.config.center.discovered or self.bypass_discovery_center) then"
+position = "before"
+payload = '''
+if self.ability.name == 'cry-Gateway' and (self.config.center.discovered or self.bypass_discovery_center) then
+    local scale_mod2 = 0.07-- + 0.02*math.cos(1.8*G.TIMERS.REAL) + 0.00*math.cos((G.TIMERS.REAL - math.floor(G.TIMERS.REAL))*math.pi*14)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^3
+    local rotate_mod2 = 0--0.05*math.cos(1.219*G.TIMERS.REAL) + 0.00*math.cos((G.TIMERS.REAL)*math.pi*5)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^2
+    self.children.floating_sprite2:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod2, rotate_mod2,nil, 0.1--[[ + 0.03*math.cos(1.8*G.TIMERS.REAL)--]],nil, 0.6)
+    self.children.floating_sprite2:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod2, rotate_mod2) 
+    
+    local scale_mod = 0.05 + 0.05*math.sin(1.8*G.TIMERS.REAL) + 0.07*math.sin((G.TIMERS.REAL - math.floor(G.TIMERS.REAL))*math.pi*14)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^3
+    local rotate_mod = 0.1*math.sin(1.219*G.TIMERS.REAL) + 0.07*math.sin((G.TIMERS.REAL)*math.pi*5)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^2
+
+    self.children.floating_sprite.role.draw_major = self
+    self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1 + 0.03*math.sin(1.8*G.TIMERS.REAL),nil, 0.6)
+    self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod)
+    
+end
+'''
+match_indent = true
+
+
+# Exotic/Epic spawn logic and Cyan Stake rate modifiers
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "rarity = (_legendary and 4) or (rarity > 0.95 and 3) or (rarity > 0.7 and 2) or 1"
+position = "at"
+payload = '''
+if not G.GAME.modifiers.cry_rarer_jokers then
+    rarity = (type(rarity) == 'string' and rarity) or (_legendary and 4) or (cry_enable_epics and rarity > 0.993 and 'cry_epic') or (rarity > 0.95 and 3) or (rarity > 0.7 and 2) or 1
+else
+    rarity = (type(rarity) == 'string' and rarity) or (_legendary and 4) or (cry_enable_epics and rarity > 0.993 and 'cry_epic') or (rarity > 0.97 and 3) or (rarity > 0.82 and 2) or 1
+end
+'''
+match_indent = true

@@ -1,0 +1,294 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# Show Glitched Edition to confirm Cryptid is Active
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "replace_card.states.visible = false"
+position = "before"
+payload = "replace_card:set_edition('e_cry_glitched',true,true)"
+match_indent = true
+
+# Patch related crash
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if not initial then G.GAME.blind:debuff_card(self) end"
+position = "at"
+payload = "if not initial and G.GAME and G.GAME.blind then G.GAME.blind:debuff_card(self) end"
+match_indent = true
+
+# Display Epic/Exotic name in rarity
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "if AUT.card_type == 'Joker' or (AUT.badges and AUT.badges.force_rarity) then card_type = ({localize('k_common'), localize('k_uncommon'), localize('k_rare'), localize('k_legendary')})[card.config.center.rarity] end"
+position = "at"
+payload = "if AUT.card_type == 'Joker' or (AUT.badges and AUT.badges.force_rarity) then card_type = ({localize('k_common'), localize('k_uncommon'), localize('k_rare'), localize('k_legendary'), ['cry_epic'] = 'Epic', ['cry_exotic'] = 'Exotic'})[card.config.center.rarity] end"
+match_indent = true
+
+
+# Fix Rare Tag creating Epic jokers
+[[patches]]
+[patches.pattern]
+target = "tag.lua"
+pattern = "card = create_card('Joker', _context.area, nil, 1, nil, nil, nil, 'rta')"
+position = "at"
+payload = "card = create_card('Joker', _context.area, nil, 0.99, nil, nil, nil, 'rta')"
+match_indent = true
+
+
+# Localization color
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "legendary = G.C.RARITY[4],"
+position = "after"
+payload = "cry_exotic = G.C.RARITY['cry_exotic'], cry_epic = G.C.RARITY['cry_epic'], cry_azure = HEX('1d4fd7'), heart = G.C.SUITS.Hearts, diamond = G.C.SUITS.Diamonds, spade = G.C.SUITS.Spades, club = G.C.SUITS.Clubs,"
+match_indent = true
+
+
+# Draw midground layer
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "if self.config.center.soul_pos and (self.config.center.discovered or self.bypass_discovery_center) then"
+position = "after"
+payload = '''
+if self.config.center.soul_pos and self.config.center.soul_pos.extra and (self.config.center.discovered or self.bypass_discovery_center) then
+    local scale_mod = 0.07-- + 0.02*math.cos(1.8*G.TIMERS.REAL) + 0.00*math.cos((G.TIMERS.REAL - math.floor(G.TIMERS.REAL))*math.pi*14)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^3
+    local rotate_mod = 0--0.05*math.cos(1.219*G.TIMERS.REAL) + 0.00*math.cos((G.TIMERS.REAL)*math.pi*5)*(1 - (G.TIMERS.REAL - math.floor(G.TIMERS.REAL)))^2
+    self.children.floating_sprite2:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,nil, 0.1--[[ + 0.03*math.cos(1.8*G.TIMERS.REAL)--]],nil, 0.6)
+    self.children.floating_sprite2:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod) 
+end
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''if k ~= 'focused_ui' and k ~= "front" and k ~= "back" and k ~= "soul_parts" and k ~= "center" and k ~= 'floating_sprite' and k~= "shadow" and k~= "use_button" and k ~= 'buy_button' and k ~= 'buy_and_use_button' and k~= "debuff" and k ~= 'price' and k~= 'particles' and k ~= 'h_popup' then v:draw() end'''
+position = "at"
+payload = '''if k ~= 'focused_ui' and k ~= "front" and k ~= "back" and k ~= "soul_parts" and k ~= "center" and k ~= 'floating_sprite' and k ~= 'floating_sprite2' and k~= "shadow" and k~= "use_button" and k ~= 'buy_button' and k ~= 'buy_and_use_button' and k~= "debuff" and k ~= 'price' and k~= 'particles' and k ~= 'h_popup' then v:draw() end'''
+match_indent = true
+
+
+# Custom variables in info queue
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end)"
+position = "after"
+payload = "if _c.specific_vars then specific_vars = _c.specific_vars end"
+match_indent = true
+
+
+# Exponential Mult
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if effects.jokers.Xmult_mod then mult = mod_mult(mult*effects.jokers.Xmult_mod);extras.mult = true  end"
+position = "after"
+payload = '''
+if effects.jokers.pow_mult_mod then mult = mod_mult(mult^effects.jokers.pow_mult_mod);extras.mult = true  end
+if effects.jokers.Xchip_mod then hand_chips = mod_chips(hand_chips*effects.jokers.Xchip_mod);extras.hand_chips = true  end
+'''
+match_indent = true
+
+
+# Exponential Mult
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if effect.Xmult_mod then mult = mod_mult(mult*effect.Xmult_mod);extras.mult = true  end"
+position = "after"
+payload = '''
+if effect.pow_mult_mod then mult = mod_mult(mult^effect.pow_mult_mod);extras.mult = true  end
+if effects.Xchip_mod then hand_chips = mod_chips(hand_chips*effects.Xchip_mod);extras.hand_chips = true  end
+'''
+match_indent = true
+
+# support for Xchips, Emult, etc, for playing card eval - by Jen Walter
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "elseif eval_type == 'dollars' then"
+position = "before"
+payload = '''
+elseif eval_type == 'x_chips' then 
+	sound = 'cry_Xchip'
+	amt = amt
+	text = 'X' .. amt .. ' Chips'
+	colour = G.C.CHIPS
+	config.type = 'fade'
+	config.scale = 0.7
+elseif eval_type == 'pow_mult' then 
+	sound = 'cry_^Mult'
+	amt = amt
+	text = '^' .. amt .. ' Mult'
+	colour = G.C.DARK_EDITION
+	config.type = 'fade'
+	config.scale = 0.7
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "if effects[ii].message then"
+position = "before"
+payload = '''
+if effects[ii].x_chips then
+	mod_percent = true
+	chips = mod_chips(chips*effects[ii].x_chips)
+	update_hand_text({delay = 0}, {chips = chips})
+	card_eval_status_text(G.hand.cards[i], 'x_chips', effects[ii].x_chips, percent)
+end
+
+if effects[ii].pow_mult then
+	mod_percent = true
+	mult = mod_mult(mult^effects[ii].pow_mult)
+	update_hand_text({delay = 0}, {mult = mult})
+	card_eval_status_text(G.hand.cards[i], 'pow_mult', effects[ii].pow_mult, percent)
+end
+
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "--calculate the card edition effects"
+position = "before"
+payload = '''
+if effects[ii].x_chips then
+	mod_percent = true
+	if effects[ii].card then juice_card(effects[ii].card) end
+	chips = mod_chips(mult*effects[ii].x_chips)
+	update_hand_text({delay = 0}, {chips = chips})
+	card_eval_status_text(scoring_hand[i], 'x_chips', effects[ii].x_chips, percent)
+end
+
+if effects[ii].pow_mult then
+	if effects[ii].card then juice_card(effects[ii].card) end
+	mult = mod_mult(mult^effects[ii].pow_mult)
+	update_hand_text({delay = 0}, {mult = mult})
+	card_eval_status_text(scoring_hand[i], 'pow_mult', effects[ii].pow_mult, percent)
+end
+
+'''
+match_indent = true
+
+# Fix not all cards returning to hand on big hands
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "{card_limit = 500, type = 'discard'})"
+position = "at"
+payload = "{card_limit = 1e308, type = 'discard'})"
+match_indent = true
+
+# Max out hand size at deck size
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "self.config.real_card_limit = (self.config.real_card_limit or self.config.card_limit) + delta"
+position = "at"
+payload = '''
+self.config.realer_card_limit = (self.config.realer_card_limit or self.config.real_card_limit or self.config.card_limit) + delta
+self.config.real_card_limit = self ~= G.hand and self.config.realer_card_limit or math.min((G.deck and G.deck.config.card_limit or 52), self.config.realer_card_limit)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = "self.config.card_limit = math.max(0, self.config.real_card_limit)"
+position = "at"
+payload = "self.config.card_limit = math.max(0, self.config.real_card_limit)"
+match_indent = true
+
+# Crash fix
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = "if not G.SAVED_GAME.VERSION or G.SAVED_GAME.VERSION < '0.9.2' then"
+position = "at"
+payload = "if not G.SAVED_GAME or not G.SAVED_GAME.VERSION or G.SAVED_GAME.VERSION < '0.9.2' then"
+match_indent = true
+
+# Play sound on XChips
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "sound = extra.edition and 'foil2' or extra.mult_mod and 'multhit1' or extra.Xmult_mod and 'multhit2' or 'generic1'"
+position = "at"
+payload = '''sound = extra.edition and 'foil2' or extra.mult_mod and 'multhit1' or extra.Xmult_mod and 'multhit2' or extra.Xchip_mod and 'cry_Xchip' or extra.pow_mult_mod and 'cry_^Mult' or 'generic1'
+'''
+match_indent = true
+
+# New perishable texture
+# Quartz Stake - register pinned sticker
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "set_profile_progress()"
+position = "before"
+payload = '''
+if self.ASSET_ATLAS['cry_sticker'] then
+    self.shared_sticker_perishable = Sprite(0, 0, self.CARD_W, self.CARD_H, self.ASSET_ATLAS["cry_sticker"], {x = 4,y = 4})
+    self.shared_stickers['pinned'] = Sprite(0, 0, self.CARD_W, self.CARD_H, self.ASSET_ATLAS['cry_sticker'], {x=5, y=0})
+end
+for i = 1, #G.CHALLENGES do
+    if (G.CHALLENGES[i].id == 'c_cry_rush_hour' or G.CHALLENGES[i].id == 'c_cry_rush_hour_ii' or G.CHALLENGES[i].id == 'c_cry_rush_hour_iii') and #G.CHALLENGES[i].restrictions.banned_other == 0 then
+        for k, v in pairs(G.P_BLINDS) do
+            if k ~= "bl_cry_clock" and k ~= "bl_cry_lavender_loop" and v.boss then
+                G.CHALLENGES[i].restrictions.banned_other[#G.CHALLENGES[i].restrictions.banned_other+1] = {id = k, type = 'blind'}
+            end
+        end
+    end
+end
+'''
+match_indent = true
+
+# Apply booster pack edition and stickers to contents - by Jen Walter
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "card.T.x = self.T.x"
+position = "before"
+payload = '''
+
+local edi = self.edition or {}
+if edi.type then
+	card:set_edition({[edi.type] = true})
+end
+
+if self.ability.eternal then
+	card.ability.eternal = self.ability.eternal
+end
+if self.ability.perishable then
+	card.ability.perishable = self.ability.perishable
+end
+if self.ability.rental then
+	card.ability.rental = self.ability.rental
+end
+if self.pinned then
+	card.pinned = self.pinned
+end
+
+'''
+match_indent = true
+
+# Prevent Jokers from spitting empty messages
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "text = extra.message or text"
+position = "after"
+payload = "if not text or text == '' then return end"
+match_indent = true

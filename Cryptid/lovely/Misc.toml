@@ -1,0 +1,1145 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+# XChips Edition Effect (based on Bunco's Glitter)
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if effects[ii].edition then'
+position = 'after'
+match_indent = true
+payload = '''
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_mosaic then
+    local xchips = G.P_CENTERS.e_cry_mosaic.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' Chips',
+    edition = true,
+    x_chips = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_sparkle then
+    local xchips = G.P_CENTERS.e_cry_sparkle.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' Chips',
+    edition = true,
+    x_chips = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_greedy then
+    local xchips = G.P_CENTERS.e_cry_greedy.config.Xchips
+    hand_chips = mod_chips(hand_chips ^ 0)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' Chips',
+    edition = true,
+    x_chips = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_duplicated then
+    local xscore = G.P_CENTERS.e_cry_duplicated.config.Xscore
+    hand_chips = mod_chips(hand_chips * 2)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xscore..' Chips',
+    edition = true,
+    Xscore = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_impulsion then
+    G.GAME.dollars = G.GAME.dollars ^ 1.1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_golden then
+    G.GAME.dollars = G.GAME.dollars + 30
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_ultragolden then
+    G.GAME.dollars = G.GAME.dollars + 90
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_chromaticimpulsion then
+    hand_chips = mod_chips(hand_chips ^ 1.5)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_darkvoid_balavirus then
+    hand_chips = mod_chips(hand_chips ^ (1e+100))
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_psychedelic then
+    hand_chips = mod_chips(hand_chips ^ 40)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_psychedelic_balavirus then
+    hand_chips = mod_chips(hand_chips ^ (1e+10))
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_brilliant then
+    hand_chips = mod_chips(hand_chips * 2)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_catalyst then
+    hand_chips = mod_chips(hand_chips * 3)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    G.GAME.dollars = G.GAME.dollars + 1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_hardstone then
+    hand_chips = mod_chips(100)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_bedrock then
+    hand_chips = mod_chips(1000)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_chromaticplatinum then
+    hand_chips = mod_chips(hand_chips ^ 12)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_omnichromatic then
+    hand_chips = mod_chips(hand_chips ^ 12)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_chromaticastral then
+    hand_chips = mod_chips(hand_chips ^ 1.5)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_shadowing then
+    hand_chips = mod_chips(hand_chips ^ 3)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_graymatter then
+    hand_chips = mod_chips(hand_chips ^ 6)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_blister then
+    hand_chips = mod_chips(hand_chips + 500)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_galvanized then
+    hand_chips = mod_chips(hand_chips + 1000)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_metallic then
+    G.GAME.dollars = G.GAME.dollars + 10
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_tvghost then
+    hand_chips = mod_chips(hand_chips + 60)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    G.GAME.dollars = G.GAME.dollars * 1.25
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_noisy then
+    hand_chips = mod_chips(hand_chips * 50)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    G.GAME.dollars = G.GAME.dollars * 1.25
+end
+
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if edition_effects.jokers.x_mult_mod then'
+position = 'before'
+match_indent = true
+payload = '''
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_mosaic then
+    local xchips = G.P_CENTERS.e_cry_mosaic.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' Chips',
+    edition = true,
+    x_chips = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_sparkle then
+    local xchips = G.P_CENTERS.e_cry_sparkle.config.Xchips
+    hand_chips = mod_chips(hand_chips * xchips)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' Chips',
+    edition = true,
+    x_chips = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_greedy then
+    local xchips = G.P_CENTERS.e_cry_greedy.config.Xchips
+    hand_chips = mod_chips(hand_chips ^ 0)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = 'X'..xchips..' Chips',
+    edition = true,
+    x_chips = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_duplicated then
+    local xscore = G.P_CENTERS.e_cry_duplicated.config.Xscore
+    hand_chips = mod_chips(hand_chips * 2)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xscore..' Chips',
+    edition = true,
+    Xscore = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_impulsion then
+    G.GAME.dollars = G.GAME.dollars ^ 1.1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_golden then
+    G.GAME.dollars = G.GAME.dollars + 30
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_ultragolden then
+    G.GAME.dollars = G.GAME.dollars + 90
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_chromaticimpulsion then
+    hand_chips = mod_chips(hand_chips ^ 1.5)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_darkvoid_balavirus then
+    hand_chips = mod_chips(hand_chips ^ (1e+100))
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_psychedelic then
+    hand_chips = mod_chips(hand_chips ^ 40)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_psychedelic_balavirus then
+    hand_chips = mod_chips(hand_chips ^ (1e+10))
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_brilliant then
+    hand_chips = mod_chips(hand_chips * 2)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_catalyst then
+    hand_chips = mod_chips(hand_chips * 3)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    G.GAME.dollars = G.GAME.dollars + 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_hardstone then
+    hand_chips = mod_chips(100)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_bedrock then
+    hand_chips = mod_chips(1000)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_chromaticplatinum then
+    hand_chips = mod_chips(hand_chips ^ 12)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_omnichromatic then
+    hand_chips = mod_chips(hand_chips ^ 12)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_chromaticastral then
+    hand_chips = mod_chips(hand_chips ^ 1.5)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_shadowing then
+    hand_chips = mod_chips(hand_chips ^ 3)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_graymatter then
+    hand_chips = mod_chips(hand_chips ^ 6)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_blister then
+    hand_chips = mod_chips(hand_chips + 500)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_galvanized then
+    hand_chips = mod_chips(hand_chips + 1000)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_metallic then
+    G.GAME.dollars = G.GAME.dollars + 10
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_tvghost then
+    hand_chips = mod_chips(hand_chips + 60)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    G.GAME.dollars = G.GAME.dollars * 1.25
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_noisy then
+    hand_chips = mod_chips(hand_chips * 50)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+    G.GAME.dollars = G.GAME.dollars * 1.25
+end
+'''
+
+# Shine on Oversaturated to make it more noticable
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "if (self.edition and self.edition.negative) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then"
+position = 'at'
+match_indent = true
+payload = "if (self.edition and (self.edition.negative or self.edition.cry_oversat or self.edition.cry_verdantstakecurse or self.edition.cry_chromaticplatinum or self.edition.cry_graymatter or self.edition.cry_hardstone or self.edition.cry_chromaticimpulsion or self.edition.cry_golden or self.edition.cry_psychedelic_balavirus or self.edition.cry_darkvoid_balavirus or self.edition.cry_absoluteglitch_balavirus or self.edition.cry_eyesless_balavirus)) or (self.ability.name == 'Antimatter' and (self.config.center.discovered or self.bypass_discovery_center)) then"
+
+# ^Mult Edition Effect
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if effects[ii].edition then'
+position = 'after'
+match_indent = true
+payload = '''
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_astral then
+    local pow_mult = G.P_CENTERS.e_cry_astral.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_hyperatral then
+    local pow_mult = G.P_CENTERS.e_cry_hyperastral.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_cosmic then
+    local pow_mult = G.P_CENTERS.e_cry_cosmic.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_hypercosmic then
+    local pow_mult = G.P_CENTERS.e_cry_hypercosmic.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_darkmatter then
+    local pow_mult = G.P_CENTERS.e_cry_darkmatter.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_darkvoid then
+    local pow_mult = G.P_CENTERS.e_cry_darkvoid.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_darkvoid_balavirus then
+    local pow_mult = G.P_CENTERS.e_cry_darkvoid_balavirus.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_bailiff then
+    local pow_mult = G.P_CENTERS.e_cry_bailiff.config.Xmult
+    mult = mod_mult(mult ^ 0)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_duplicated then
+    local xscore = G.P_CENTERS.e_cry_duplicated.config.Xscore
+    mult = mod_mult(mult * 2)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xscore..' Mult',
+    edition = true,
+    Xscore = true})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_chromaticimpulsion then
+    mult = mod_mult(mult ^ 1.5)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars ^ 1.5
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_root then
+    mult = mod_mult(mult ^ 0.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_galvanized then
+    mult = mod_mult(mult * 3)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_hardstone then
+    mult = mod_mult(100)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_bedrock then
+    mult = mod_mult(1000)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_rainbow then
+    mult = mod_mult(mult * 15)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_hyperchrome then
+    mult = mod_mult(mult * 512)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_shadowing then
+    mult = mod_mult(mult ^ 0.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_graymatter then
+    mult = mod_mult(mult ^ 0.75)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_titanium then
+    mult = mod_mult(mult + 20)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars + 15
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_brilliant then
+    mult = mod_mult(mult * 2)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.current_round.dicsards_left = G.GAME.current_round.dicsards_left + 1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_chromaticplatinum then
+    mult = mod_mult(mult ^ 12)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.current_round.dicsards_left = G.GAME.current_round.dicsards_left + 2
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_chromaticastral then
+    mult = mod_mult(mult ^ 1.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_omnichromatic then
+    mult = mod_mult(mult ^ 12)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.current_round.dicsards_left = G.GAME.current_round.dicsards_left + 2
+    G.GAME.dollars = G.GAME.dollars * 2
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_opposite then
+    local Xjokers = G.P_CENTERS.e_cry_opposite.config.Xjokers
+    G.jokers.config.card_limit = G.jokers.config.card_limit + Xjokers
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_superopposite then
+    local Xjokers = G.P_CENTERS.e_cry_superopposite.config.Xjokers
+    G.jokers.config.card_limit = G.jokers.config.card_limit + Xjokers
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_ultraopposite then
+    local Xjokers = G.P_CENTERS.e_cry_ultraopposite.config.Xjokers
+    G.jokers.config.card_limit = G.jokers.config.card_limit + Xjokers
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_hyperopposite then
+    local Xjokers = G.P_CENTERS.e_cry_hyperopposite.config.Xjokers
+    G.jokers.config.card_limit = G.jokers.config.card_limit + Xjokers
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_eraser then
+    local Xjokers = G.P_CENTERS.e_cry_eraser.config.Xjokers
+    G.jokers.config.card_limit = G.jokers.config.card_limit - Xjokers
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_pocketedition then
+    local Xconsumable = G.P_CENTERS.e_cry_pocketedition.config.Xconsumable
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + Xconsumable
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_pocketedition then
+    local Xconsumable = G.P_CENTERS.e_cry_pocketedition.config.Xconsumable
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + Xconsumable
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_limitededition then
+    local Xcost = G.P_CENTERS.e_cry_limitededition.config.Xconsumable
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + Xconsumable
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_lefthanded then
+    local xhand = G.P_CENTERS.e_cry_lefthanded.config.Xhand
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands + 0.15
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left + 0.15
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_psychedelic then
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left ^ 2
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left ^ 2
+    mult = mod_mult(mult ^ 40)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars ^ 40
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_psychedelic_balavirus then
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left ^ 10
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left ^ 10
+    mult = mod_mult(mult ^ (1e+10))
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars ^ (1e+10)
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_righthanded then
+    local xdiscard = G.P_CENTERS.e_cry_righthanded.config.Xdiscard
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + 0.15
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + 0.15
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_trash then
+    local Xconsumable = G.P_CENTERS.e_cry_trash.config.Xconsumable
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + Xconsumable
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_trash then
+    local Xconsumable = G.P_CENTERS.e_cry_trash.config.Xconsumable
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + Xconsumable
+end
+
+-- -------------------------------------------------Stake Curse Editions -------------------------------------------------
+-- Pink Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_pinkstakecurse then
+    local Xpinkstakecurse = G.P_CENTERS.e_cry_pinkstakecurse.config.Xpinkstakecurse
+    G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.starting_params.ante_scaling*1.5
+    G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling*1.5
+    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_pinkstakecurse then
+    local Xpinkstakecurse = G.P_CENTERS.e_cry_pinkstakecurse.config.Xpinkstakecurse
+    G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.starting_params.ante_scaling*1.5
+    G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling*1.5
+    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_pinkstakecurse then
+    local Xpinkstakecurse = G.P_CENTERS.e_cry_pinkstakecurse.config.Xpinkstakecurse
+    G.jokers.config.card_limit = G.jokers.config.card_limit + 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_pinkstakecurse then
+    local Xpinkstakecurse = G.P_CENTERS.e_cry_pinkstakecurse.config.Xpinkstakecurse
+    G.jokers.config.card_limit = G.jokers.config.card_limit + 1
+end
+-- Brown Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_brownstakecurse then
+    local Xbrownstakecurse = G.P_CENTERS.e_cry_brownstakecurse.config.Xbrownstakecurse
+    G.GAME.modifiers.cry_eternal_perishable_compat = true
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_brownstakecurse then
+    local Xbrownstakecurse = G.P_CENTERS.e_cry_brownstakecurse.config.Xbrownstakecurse
+    G.GAME.modifiers.cry_eternal_perishable_compat = true
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_brownstakecurse then
+    local Xbrownstakecurse = G.P_CENTERS.e_cry_brownstakecurse.config.Xbrownstakecurse
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + 0.1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_brownstakecurse then
+    local Xbrownstakecurse = G.P_CENTERS.e_cry_brownstakecurse.config.Xbrownstakecurse
+    G.consumeables.config.card_limit = G.consumeables.config.card_limit + 0.1
+end
+-- Yellow Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_yellowstakecurse then
+    local Xyellowstakecurse = G.P_CENTERS.e_cry_yellowstakecurse.config.Xyellowstakecurse
+    G.GAME.modifiers.cry_any_stickers = true
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_yellowstakecurse then
+    local Xyellowstakecurse = G.P_CENTERS.e_cry_yellowstakecurse.config.Xyellowstakecurse
+    G.GAME.modifiers.cry_any_stickers = true
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_yellowstakecurse then
+    local Xyellowstakecurse = G.P_CENTERS.e_cry_yellowstakecurse.config.Xyellowstakecurse
+    G.GAME.dollars = G.GAME.dollars + 4
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_yellowstakecurse then
+    local Xyellowstakecurse = G.P_CENTERS.e_cry_yellowstakecurse.config.Xyellowstakecurse
+    G.GAME.dollars = G.GAME.dollars + 4
+end
+-- Jade Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_jadestakecurse then
+    local Xjadestakecurse = G.P_CENTERS.e_cry_jadestakecurse.config.Xjadestakecurse
+    G.GAME.modifiers.flipped_cards = 5 + Xjadestakecurse
+    Xjadestakecurse = Xjadestakecurse + 5
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_jadestakecurse then
+    local Xjadestakecurse = G.P_CENTERS.e_cry_jadestakecurse.config.Xjadestakecurse
+    G.GAME.modifiers.flipped_cards = 5 + Xjadestakecurse
+    Xjadestakecurse = Xjadestakecurse + 5
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_jadestakecurse then
+    local Xjadestakecurse = G.P_CENTERS.e_cry_jadestakecurse.config.Xjadestakecurse
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left + 0.5
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + 0.5
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_jadestakecurse then
+    local Xjadestakecurse = G.P_CENTERS.e_cry_jadestakecurse.config.Xjadestakecurse
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left + 0.5
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + 0.5
+end
+-- Cyan Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_cyanstakecurse then
+    local Xcyanstakecurse = G.P_CENTERS.e_cry_cyanstakecurse.config.Xcyanstakecurse
+    G.GAME.joker_rate = G.GAME.joker_rate - 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_cyanstakecurse then
+    local Xcyanstakecurse = G.P_CENTERS.e_cry_cyanstakecurse.config.Xcyanstakecurse
+    G.GAME.joker_rate = G.GAME.joker_rate - 1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_cyanstakecurse then
+    local Xcyanstakecurse = G.P_CENTERS.e_cry_cyanstakecurse.config.Xcyanstakecurse
+    G.GAME.edition_rate = G.GAME.edition_rate + 2
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_cyanstakecurse then
+    local Xcyanstakecurse = G.P_CENTERS.e_cry_cyanstakecurse.config.Xcyanstakecurse
+    G.GAME.edition_rate = G.GAME.edition_rate + 2
+end
+-- Gray Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_graystakecurse then
+    local Xgraystakecurse = G.P_CENTERS.e_cry_graystakecurse.config.Xgraystakecurse
+    G.GAME.inflation = 0 + Xgraystakecurse
+    Xgraystakecurse = Xgraystakecurse + 2
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_graystakecurse then
+    local Xgraystakecurse = G.P_CENTERS.e_cry_graystakecurse.config.Xgraystakecurse
+    G.GAME.inflation = 0 + Xgraystakecurse
+    Xgraystakecurse = Xgraystakecurse + 2
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_graystakecurse then
+    local Xgraystakecurse = G.P_CENTERS.e_cry_graystakecurse.config.Xgraystakecurse
+    G.GAME.dollars = G.GAME.dollars * 1.2
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_graystakecurse then
+    local Xgraystakecurse = G.P_CENTERS.e_cry_graystakecurse.config.Xgraystakecurse
+    G.GAME.dollars = G.GAME.dollars * 1.2
+end
+-- Crimson Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_crimsonstakecurse then
+    local Xcrimsonstakecurse = G.P_CENTERS.e_cry_crimsonstakecurse.config.Xcrimsonstakecurse
+    G.GAME.inflation = G.GAME.dollars
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_crimsonstakecurse then
+    local Xcrimsonstakecurse = G.P_CENTERS.e_cry_crimsonstakecurse.config.Xcrimsonstakecurse
+    G.GAME.inflation = G.GAME.dollars
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_crimsonstakecurse then
+    local Xcrimsonstakecurse = G.P_CENTERS.e_cry_crimsonstakecurse.config.Xcrimsonstakecurse
+    G.GAME.discount_percent = 75
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_crimsonstakecurse then
+    local Xcrimsonstakecurse = G.P_CENTERS.e_cry_crimsonstakecurse.config.Xcrimsonstakecurse
+    G.GAME.discount_percent = 75
+end
+-- Diamond Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_diamondstakecurse then
+    local Xdiamondstakecurse = G.P_CENTERS.e_cry_diamondstakecurse.config.Xdiamondstakecurse
+    G.GAME.win_ante = G.GAME.win_ante + 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_diamondstakecurse then
+    local Xdiamondstakecurse = G.P_CENTERS.e_cry_diamondstakecurse.config.Xdiamondstakecurse
+    G.GAME.win_ante = G.GAME.win_ante + 1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_diamondstakecurse then
+    local Xdiamondstakecurse = G.P_CENTERS.e_cry_diamondstakecurse.config.Xdiamondstakecurse
+    G.GAME.interest_amount = G.GAME.interest_amount + 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_diamondstakecurse then
+    local Xdiamondstakecurse = G.P_CENTERS.e_cry_diamondstakecurse.config.Xdiamondstakecurse
+    G.GAME.interest_amount = G.GAME.interest_amount + 1
+end
+-- Amber Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_amberstakecurse then
+    local Xamberstakecurse = G.P_CENTERS.e_cry_amberstakecurse.config.Xamberstakecurse
+    G.GAME.modifiers.cry_booster_packs = 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_amberstakecurse then
+    local Xamberstakecurse = G.P_CENTERS.e_cry_amberstakecurse.config.Xamberstakecurse
+    G.GAME.modifiers.cry_booster_packs = 1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_amberstakecurse then
+    local Xamberstakecurse = G.P_CENTERS.e_cry_amberstakecurse.config.Xamberstakecurse
+    G.GAME.shop.joker_max = 3
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_amberstakecurse then
+    local Xamberstakecurse = G.P_CENTERS.e_cry_amberstakecurse.config.Xamberstakecurse
+    G.GAME.shop.joker_max = 3
+end
+-- Bronze Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_bronzestakecurse then
+    local Xbronzestakecurse = G.P_CENTERS.e_cry_bronzestakecurse.config.Xbronzestakecurse
+    G.GAME.inflation = 5
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_bronzestakecurse then
+    local Xbronzestakecurse = G.P_CENTERS.e_cry_bronzestakecurse.config.Xbronzestakecurse
+    G.GAME.inflation = 5
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_bronzestakecurse then
+    local Xbronzestakecurse = G.P_CENTERS.e_cry_bronzestakecurse.config.Xbronzestakecurse
+    G.GAME.dollars = G.GAME.dollars + G.GAME.current_round.discards_left
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_bronzestakecurse then
+    local Xbronzestakecurse = G.P_CENTERS.e_cry_bronzestakecurse.config.Xbronzestakecurse
+    G.GAME.dollars = G.GAME.dollars + G.GAME.current_round.discards_left
+end
+-- Quartz Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_quartzstakecurse then
+    local Xquartzstakecurse = G.P_CENTERS.e_cry_quartzstakecurse.config.Xquartzstakecurse
+    G.GAME.modifiers.cry_enable_pinned_in_shop = true
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_quartzstakecurse then
+    local Xquartzstakecurse = G.P_CENTERS.e_cry_quartzstakecurse.config.Xquartzstakecurse
+    G.GAME.modifiers.cry_enable_pinned_in_shop = true
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_quartzstakecurse then
+    local Xquartzstakecurse = G.P_CENTERS.e_cry_quartzstakecurse.config.Xquartzstakecurse
+    mult = mod_mult(mult * 1.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_quartzstakecurse then
+    local Xquartzstakecurse = G.P_CENTERS.e_cry_quartzstakecurse.config.Xquartzstakecurse
+    mult = mod_mult(mult * 1.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+-- Ruby Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_rubystakecurse then
+    local Xrubystakecurse = G.P_CENTERS.e_cry_rubystakecurse.config.Xrubystakecurse
+    G.GAME.modifiers.cry_big_boss_rate = 0 + Xrubystakecurse
+    Xrubystakecurse = Xrubystakecurse + 0.1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_rubystakecurse then
+    local Xrubystakecurse = G.P_CENTERS.e_cry_rubystakecurse.config.Xrubystakecurse
+    G.GAME.modifiers.cry_big_boss_rate = 0 + Xrubystakecurse
+    Xrubystakecurse = Xrubystakecurse + 0.1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_rubystakecurse then
+    local Xrubystakecurse = G.P_CENTERS.e_cry_rubystakecurse.config.Xrubystakecurse
+    G.GAME.spectral_rate = G.GAME.spectral_rate + 5
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_rubystakecurse then
+    local Xrubystakecurse = G.P_CENTERS.e_cry_rubystakecurse.config.Xrubystakecurse
+    G.GAME.spectral_rate = G.GAME.spectral_rate + 5
+end
+-- Glass curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_glassstakecurse then
+    local Xglassstakecurse = G.P_CENTERS.e_cry_glassstakecurse.config.Xglassstakecurse
+    G.GAME.modifiers.cry_shatter_rate = 0 + Xglassstakecurse
+    Xglassstakecurse = Xglassstakecurse + 10
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_glassstakecurse then
+    local Xglassstakecurse = G.P_CENTERS.e_cry_glassstakecurse.config.Xglassstakecurse
+    G.GAME.modifiers.cry_shatter_rate = 0 + Xglassstakecurse
+    Xglassstakecurse = Xglassstakecurse + 10
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_glassstakecurse then
+    local Xglassstakecurse = G.P_CENTERS.e_cry_glassstakecurse.config.Xglassstakecurse
+    hand_chips = mod_chips(hand_chips * G.GAME.dollars * 0.25)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_glassstakecurse then
+    local Xglassstakecurse = G.P_CENTERS.e_cry_glassstakecurse.config.Xglassstakecurse
+    hand_chips = mod_chips(hand_chips * G.GAME.dollars * 0.25)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+-- Sapphire Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_sapphirestakecurse then
+    local Xsapphirestakecurse = G.P_CENTERS.e_cry_sapphirestakecurse.config.Xsapphirestakecurse
+    G.GAME.modifiers.cry_ante_tax = 0.25
+    G.GAME.modifiers.cry_ante_tax_max = 10 + Xsapphirestakecurse
+    Xsapphirestakecurse = Xsapphirestakecurse + 10
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_sapphirestakecurse then
+    local Xsapphirestakecurse = G.P_CENTERS.e_cry_sapphirestakecurse.config.Xsapphirestakecurse
+    G.GAME.modifiers.cry_ante_tax = 0.25
+    G.GAME.modifiers.cry_ante_tax_max = 10 + Xsapphirestakecurse
+    Xsapphirestakecurse = Xsapphirestakecurse + 10
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_sapphirestakecurse then
+    local Xsapphirestakecurse = G.P_CENTERS.e_cry_sapphirestakecurse.config.Xsapphirestakecurse
+    hand_chips = mod_chips(hand_chips + 10 * Xsapphirestakecurse)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_sapphirestakecurse then
+    local Xsapphirestakecurse = G.P_CENTERS.e_cry_sapphirestakecurse.config.Xsapphirestakecurse
+    hand_chips = mod_chips(hand_chips + 10 * Xsapphirestakecurse)
+    update_hand_text({delay = 0}, {chips = hand_chips})
+end
+-- Emerald Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_emeraldstakecurse then
+    local Xemeraldstakecurse = G.P_CENTERS.e_cry_emeraldstakecurse.config.Xemeraldstakecurse
+    G.GAME.modifiers.cry_enable_flipped_in_shop = true
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_emeraldstakecurse then
+    local Xemeraldstakecurse = G.P_CENTERS.e_cry_emeraldstakecurse.config.Xemeraldstakecurse
+    G.GAME.modifiers.cry_enable_flipped_in_shop = true
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_emeraldstakecurse then
+    local Xemeraldstakecurse = G.P_CENTERS.e_cry_emeraldstakecurse.config.Xemeraldstakecurse
+    mult = mod_mult(mult + G.GAME.dollars * 0.1)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_emeraldstakecurse then
+    local Xemeraldstakecurse = G.P_CENTERS.e_cry_emeraldstakecurse.config.Xemeraldstakecurse
+    mult = mod_mult(mult + G.GAME.dollars * 0.1)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+-- Platinum Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_platinumstakecurse then
+    local Xplatinumstakecurse = G.P_CENTERS.e_cry_platinumstakecurse.config.Xplatinumstakecurse
+    G.GAME.modifiers.cry_no_small_blind = true
+    G.GAME.round_resets.blind_states['Small'] = 'Hide'
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_platinumstakecurse then
+    local Xplatinumstakecurse = G.P_CENTERS.e_cry_platinumstakecurse.config.Xplatinumstakecurse
+    G.GAME.modifiers.cry_no_small_blind = true
+    G.GAME.round_resets.blind_states['Small'] = 'Hide'
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_platinumstakecurse then
+    local Xplatinumstakecurse = G.P_CENTERS.e_cry_platinumstakecurse.config.Xplatinumstakecurse
+    mult = mod_mult(mult * (G.GAME.current_round.hands_played + 1))
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_platinumstakecurse then
+    local Xplatinumstakecurse = G.P_CENTERS.e_cry_platinumstakecurse.config.Xplatinumstakecurse
+    mult = mod_mult(mult * (G.GAME.current_round.hands_played + 1))
+    update_hand_text({delay = 0}, {mult = mult})
+end
+-- Verdant Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_verdantstakecurse then
+    local Xverdantstakecurse = G.P_CENTERS.e_cry_verdantstakecurse.config.Xverdantstakecurse
+    G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.starting_params.ante_scaling*5
+    G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling*5
+    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_verdantstakecurse then
+    local Xverdantstakecurse = G.P_CENTERS.e_cry_verdantstakecurse.config.Xverdantstakecurse
+    G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.starting_params.ante_scaling*5
+    G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling*5
+    G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_verdantstakecurse then
+    local Xverdantstakecurse = G.P_CENTERS.e_cry_verdantstakecurse.config.Xverdantstakecurse
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + 2
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_verdantstakecurse then
+    local Xverdantstakecurse = G.P_CENTERS.e_cry_verdantstakecurse.config.Xverdantstakecurse
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards +2
+end
+-- Ember Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_emberstakecurse then
+    local Xemberstakecurse = G.P_CENTERS.e_cry_emberstakecurse.config.Xemberstakecurse
+    G.GAME.modifiers.cry_no_sell_value = true
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_emberstakecurse then
+    local Xemberstakecurse = G.P_CENTERS.e_cry_emberstakecurse.config.Xemberstakecurse
+    G.GAME.modifiers.cry_no_sell_value = true
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_emberstakecurse then
+    local Xemberstakecurse = G.P_CENTERS.e_cry_emberstakecurse.config.Xemberstakecurse
+    G.GAME.interest_cap = 400
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_emberstakecurse then
+    local Xemberstakecurse = G.P_CENTERS.e_cry_emberstakecurse.config.Xemberstakecurse
+    G.GAME.interest_cap = 400
+end
+-- Dawn Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_dawnstakecurse then
+    local Xdawnstakecurse = G.P_CENTERS.e_cry_dawnstakecurse.config.Xdawnstakecurse
+    G.consumeables.config.card_limit = 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_dawnstakecurse then
+    local Xdawnstakecurse = G.P_CENTERS.e_cry_dawnstakecurse.config.Xdawnstakecurse
+    G.consumeables.config.card_limit = 1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_dawnstakecurse then
+    local Xdawnstakecurse = G.P_CENTERS.e_cry_dawnstakecurse.config.Xdawnstakecurse
+    G.GAME.tarot_rate = 90
+    G.GAME.spectral_rate = 20
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_dawnstakecurse then
+    local Xdawnstakecurse = G.P_CENTERS.e_cry_dawnstakecurse.config.Xdawnstakecurse
+    G.GAME.tarot_rate = 90
+    G.GAME.spectral_rate = 20
+end
+-- Horizon Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_horizonstakecurse then
+    local Xhorizonstakecurse = G.P_CENTERS.e_cry_horizonstakecurse.config.Xhorizonstakecurse
+    G.GAME.playing_card_rate = 25
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_horizonstakecurse then
+    local Xhorizonstakecurse = G.P_CENTERS.e_cry_horizonstakecurse.config.Xhorizonstakecurse
+    G.GAME.playing_card_rate = 25
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_horizonstakecurse then
+    local Xhorizonstakecurse = G.P_CENTERS.e_cry_horizonstakecurse.config.Xhorizonstakecurse
+    mult = mod_mult(mult * 0.75)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_horizonstakecurse then
+    local Xhorizonstakecurse = G.P_CENTERS.e_cry_horizonstakecurse.config.Xhorizonstakecurse
+    mult = mod_mult(mult * 0.75)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+-- Blossom Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_blossomstakecurse then
+    local Xblossomstakecurse = G.P_CENTERS.e_cry_blossomstakecurse.config.Xblossomstakecurse
+    G.GAME.modifiers.cry_big_showdown = true
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_blossomstakecurse then
+    local Xblossomstakecurse = G.P_CENTERS.e_cry_blossomstakecurse.config.Xblossomstakecurse
+    G.GAME.modifiers.cry_big_showdown = true
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_blossomstakecurse then
+    local Xblossomstakecurse = G.P_CENTERS.e_cry_blossomstakecurse.config.Xblossomstakecurse
+    G.GAME.dollars = G.GAME.dollars + G.GAME.current_round.hands_left * 2
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_blossomstakecurse then
+    local Xblossomstakecurse = G.P_CENTERS.e_cry_blossomstakecurse.config.Xblossomstakecurse
+    G.GAME.dollars = G.GAME.dollars + G.GAME.current_round.hands_left * 2
+end
+-- Azure Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_azurestakecurse then
+    local Xazurestakecurse = G.P_CENTERS.e_cry_azurestakecurse.config.Xazurestakecurse
+    G.GAME.modifiers.cry_jkr_misprint_mod = 0.5
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_azurestakecurse then
+    local Xazurestakecurse = G.P_CENTERS.e_cry_azurestakecurse.config.Xazurestakecurse
+    G.GAME.modifiers.cry_jkr_misprint_mod = 0.5
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_azurestakecurse then
+    local Xazurestakecurse = G.P_CENTERS.e_cry_azurestakecurse.config.Xazurestakecurse
+    mult = mod_mult(mult ^ 2)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_azurestakecurse then
+    local Xazurestakecurse = G.P_CENTERS.e_cry_azurestakecurse.config.Xazurestakecurse
+    mult = mod_mult(mult ^ 2)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+-- Ascendant Curse *
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_ascendantstakecurse then
+    local Xascendantstakecurse = G.P_CENTERS.e_cry_ascendantstakecurse.config.Xascendantstakecurse
+    G.GAME.shop.joker_max = 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_ascendantstakecurse then
+    local Xascendantstakecurse = G.P_CENTERS.e_cry_ascendantstakecurse.config.Xascendantstakecurse
+    G.GAME.shop.joker_max = 1
+end
+if scoring_hand and scoring_hand[i] and scoring_hand[i].edition and scoring_hand[i].edition.cry_ascendantstakecurse then
+    local Xascendantstakecurse = G.P_CENTERS.e_cry_ascendantstakecurse.config.Xascendantstakecurse
+    G.GAME.modifiers.cry_jkr_misprint_mod = 1.5
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_ascendantstakecurse then
+    local Xascendantstakecurse = G.P_CENTERS.e_cry_ascendantstakecurse.config.Xascendantstakecurse
+    G.GAME.modifiers.cry_jkr_misprint_mod = 1.5
+end
+'''
+[[patches]]
+[patches.pattern]
+target = 'functions/state_events.lua'
+pattern = 'if edition_effects.jokers.x_mult_mod then'
+position = 'before'
+match_indent = true
+payload = '''
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_astral then
+    local pow_mult = G.P_CENTERS.e_cry_astral.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_hyperastral then
+    local pow_mult = G.P_CENTERS.e_cry_hyperastral.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_cosmic then
+    local pow_mult = G.P_CENTERS.e_cry_cosmic.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_hypercosmic then
+    local pow_mult = G.P_CENTERS.e_cry_hypercosmic.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_darkmatter then
+    local pow_mult = G.P_CENTERS.e_cry_darkmatter.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_darkvoid then
+    local pow_mult = G.P_CENTERS.e_cry_darkvoid.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_darkvoid_balavirus then
+    local pow_mult = G.P_CENTERS.e_cry_darkvoid_balavirus.config.pow_mult
+    mult = mod_mult(mult ^ pow_mult)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(G.jokers.cards[i], 'extra', nil, percent, nil,
+    {message = '^'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_bailiff then
+    local pow_mult = G.P_CENTERS.e_cry_bailiff.config.Xmult
+    mult = mod_mult(mult ^ 0)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..pow_mult..' Mult',
+    edition = true,
+    pow_mult = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_duplicated then
+    local xscore = G.P_CENTERS.e_cry_duplicated.config.Xscore
+    mult = mod_mult(mult * 2)
+    update_hand_text({delay = 0}, {mult = mult})
+    card_eval_status_text(scoring_hand[i], 'extra', nil, percent, nil,
+    {message = 'X'..xscore..' Mult',
+    edition = true,
+    Xscore = true})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_psychedelic then
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left ^ 2
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left ^ 2
+    mult = mod_mult(mult ^ 40)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars ^ 40
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_psychedelic_balavirus then
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left ^ 10
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left ^ 10
+    mult = mod_mult(mult ^ (1e+10))
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars ^ (1e+10)
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_brilliant then
+    mult = mod_mult(mult * 2)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + 1
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_rainbow then
+    mult = mod_mult(mult * 15)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_chromaticimpulsion then
+    mult = mod_mult(mult ^ 1.5)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars ^ 1.5
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_root then
+    mult = mod_mult(mult ^ 0.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_hardstone then
+    mult = mod_mult(100)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_bedrock then
+    mult = mod_mult(1000)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_hyperchrome then
+    mult = mod_mult(mult * 512)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_shadowing then
+    mult = mod_mult(mult ^ 0.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_graymatter then
+    mult = mod_mult(mult ^ 0.75)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_titanium then
+    mult = mod_mult(mult + 20)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.dollars = G.GAME.dollars + 15
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_chromaticplatinum then
+    mult = mod_mult(mult ^ 12)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + 2
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_chromaticastral then
+    mult = mod_mult(mult ^ 1.5)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_omnichromatic then
+    mult = mod_mult(mult ^ 12)
+    update_hand_text({delay = 0}, {mult = mult})
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + 2
+    G.GAME.dollars = G.GAME.dollars * 2
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_lefthanded then
+    local Xhand = G.P_CENTERS.e_cry_lefthanded.config.Xhand
+    G.GAME.round_resets.hands = G.GAME.round_resets.hands + 0.15
+    G.GAME.current_round.hands_left = G.GAME.current_round.hands_left + 0.15
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_righthanded then
+    local xdiscard = G.P_CENTERS.e_cry_righthanded.config.Xdiscard
+    G.GAME.round_resets.discards = G.GAME.round_resets.discards + 0.15
+    G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + 0.15
+end
+if G.jokers.cards and G.jokers.cards[i] and G.jokers.cards[i].edition and G.jokers.cards[i].edition.cry_galvanized then
+    mult = mod_mult(mult * 3)
+    update_hand_text({delay = 0}, {mult = mult})
+end
+'''
+
+# Empowered Tag
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''card = create_card("Spectral", G.pack_cards, nil, nil, true, true, nil, 'spe')'''
+position = 'at'
+match_indent = true
+payload = '''
+card = nil --this line allows Steamodded's Pack API patch to work
+if self.from_empowered then
+    if i == 1 then
+        card = create_card("Spectral", G.pack_cards, nil, nil, true, true, 'c_soul', 'spe')
+    else
+        card = create_card("Spectral", G.pack_cards, nil, nil, true, true, G.P_CENTERS.c_cry_gateway and 'c_cry_gateway' or 'c_soul', 'spe')
+    end
+else
+    card = create_card("Spectral", G.pack_cards, nil, nil, true, true, nil, 'spe')
+end
+'''
+
+# Banana Tag
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.rental then badges[#badges + 1] = 'rental' end'''
+position = 'after'
+match_indent = true
+payload = '''
+if self.ability.banana then badges[#badges + 1] = 'banana' end
+'''
+
+# Banana Tag
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''if v == 'rental' then info_queue[#info_queue+1] = {key = 'rental', set = 'Other', vars = {G.GAME.rental_rate or 1}} end'''
+position = 'after'
+match_indent = true
+payload = '''
+if v == 'banana' then info_queue[#info_queue+1] = {key = 'banana', set = 'Other', vars = {G.GAME.probabilities.normal or 1, 10}} end
+'''
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''pinned_left = G.C.ORANGE,'''
+position = 'after'
+payload = '''banana = HEX("e8c500"),'''
+match_indent = true
