@@ -1,0 +1,1 @@
+return {["keybinds"]={["loadState"]="x",["saveState"]="z",["autoReroll"]="a",["rerollSeed"]="t",},["autoreroll"]={["searchForSoul"]=1,["searchTagID"]=2,["searchTag"]="tag_charm",["seedsPerFrameID"]=3,["seedsPerFrame"]=1000,["searchPackID"]=21,["searchPack"]={[1]="p_spectral_mega_1",},},["debug_mode"]=true,}
