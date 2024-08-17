@@ -320,6 +320,18 @@ local twilight = {object_type = "Stake",
     shiny = true,
     colour = G.C.CRY_TWILIGHT
 }
+local banana = {
+    object_type = "Sticker",
+    badge_colour = HEX("e8c500"),
+    prefix_config = {key = false},
+    key = "banana",
+    atlas = "sticker",
+    pos = {x = 5, y = 2},
+    should_apply = false,
+    loc_vars = function(self, info_queue, card)
+        return {vars = {G.GAME.probabilities.normal or 1, 10}}
+    end
+}
 local verdant = {object_type = "Stake",
 	name = "cry-Verdant Stake",
 	key = "verdant",
@@ -351,7 +363,7 @@ local ember = {object_type = "Stake",
 	loc_txt = {
         name = "Ember Stake",
         text = {
-        "All items have no sell value",
+        "All items give no money when sold",
         }
     },
     shiny = true,
@@ -680,15 +692,6 @@ return {name = "More Stakes",
                 end,
             },true)
             
-            -- This is short enough that I'm fine overriding it
-            function calculate_reroll_cost(skip_increment)
-                if G.GAME.current_round.free_rerolls < 0 then G.GAME.current_round.free_rerolls = 0 end
-                if G.GAME.current_round.free_rerolls > 0 then G.GAME.current_round.reroll_cost = 0; return end
-                G.GAME.current_round.reroll_cost_increase = G.GAME.current_round.reroll_cost_increase or 0
-                if not skip_increment then G.GAME.current_round.reroll_cost_increase = G.GAME.current_round.reroll_cost_increase + (G.GAME.modifiers.cry_reroll_scaling or 1) end
-                G.GAME.current_round.reroll_cost = (G.GAME.round_resets.temp_reroll_cost or G.GAME.round_resets.reroll_cost) + G.GAME.current_round.reroll_cost_increase
-            end
-            
             local sc = Card.set_cost
             function Card:set_cost()
                 sc(self)
@@ -698,9 +701,6 @@ return {name = "More Stakes",
                     self.sell_cost = math.max(1, math.floor(self.cost/2)) + (self.ability.extra_value or 0)
                     if self.area and self.ability.couponed and (self.area == G.shop_jokers or self.area == G.shop_booster) then self.cost = 0 end
                     self.sell_cost_label = self.facing == 'back' and '?' or self.sell_cost
-                end
-                if G.GAME.modifiers.cry_no_sell_value then
-                    self.sell_cost = 0
                 end
             end
 
@@ -725,4 +725,5 @@ return {name = "More Stakes",
         end,
         items = {stake_atlas, pink, brown, yellow, jade, cyan, gray, crimson, diamond,
         amber, bronze, quartz, ruby, glass, sapphire, emerald, platinum,
-        twilight, verdant, ember, dawn, horizon, blossom, azure, ascendant}}
+        twilight, verdant, ember, dawn, horizon, blossom, azure, ascendant,
+        banana}}

@@ -3,7 +3,7 @@ local timantti = {
     set = "Planet",
     name = "cry-Timantti",
     key = "Timantti",
-    pos = {x=0,y=0},
+    pos = {x=0,y=2},
     config = {hand_types = {'High Card', 'Pair', 'Two Pair'}},
     loc_txt = {
         name = 'Timantti',
@@ -14,7 +14,7 @@ local timantti = {
     },
     cost = 4,
 	aurinko = true,
-    atlas = "c_suits",
+    atlas = "atlasnotjokers",
     can_use = function(self, card)
         return true
     end,
@@ -26,6 +26,15 @@ local timantti = {
     end,
     bulk_use = function(self, card, area, copier, number)
         suit_level_up(self, card, area, copier, number)
+    end,
+    calculate = function(self, card, context)
+	if G.GAME.used_vouchers.v_observatory and (context.scoring_name == "High Card" or context.scoring_name == "Pair" or context.scoring_name == "Two Pair") then
+		local value = G.P_CENTERS.v_observatory.config.extra
+                return {
+                    message = localize{type = 'variable', key = 'a_xmult', vars = {value}},
+                    Xmult_mod = value
+                }
+	end
     end
 }
 local klubi = {
@@ -33,7 +42,7 @@ local klubi = {
     set = "Planet",
     name = "cry-Klubi",
     key = "Klubi",
-    pos = {x=1,y=0},
+    pos = {x=1,y=2},
     config = {hand_types = {'Three of a Kind', 'Straight', 'Flush'}},
     loc_txt = {
         name = 'Klubi',
@@ -44,7 +53,7 @@ local klubi = {
     },
     cost = 4,
 	aurinko = true,
-    atlas = "c_suits",
+    atlas = "atlasnotjokers",
     can_use = function(self, card)
         return true
     end,
@@ -56,6 +65,15 @@ local klubi = {
     end,
     bulk_use = function(self, card, area, copier, number)
         suit_level_up(self, card, area, copier, number)
+    end,
+    calculate = function(self, card, context)
+	if G.GAME.used_vouchers.v_observatory and (context.scoring_name == "Three of a Kind" or context.scoring_name == "Straight" or context.scoring_name == "Flush") then
+		local value = G.P_CENTERS.v_observatory.config.extra
+                return {
+                    message = localize{type = 'variable', key = 'a_xmult', vars = {value}},
+                    Xmult_mod = value
+                }
+	end
     end
 }
 local sydan = {
@@ -63,8 +81,8 @@ local sydan = {
     set = "Planet",
     name = "cry-Sydan",
     key = "Sydan",
-    pos = {x=2,y=0},
-    config = {hand_types = {'Four of a Kind', 'Straight Flush', 'Full House'}},
+    pos = {x=2,y=2},
+    config = {hand_types = {'Full House', 'Four of a Kind', 'Straight Flush'}},
     loc_txt = {
         name = 'Sydan',
         text = {
@@ -74,7 +92,7 @@ local sydan = {
     },
     cost = 4,
 	aurinko = true,
-    atlas = "c_suits",
+    atlas = "atlasnotjokers",
     can_use = function(self, card)
         return true
     end,
@@ -86,6 +104,15 @@ local sydan = {
     end,
     bulk_use = function(self, card, area, copier, number)
         suit_level_up(self, card, area, copier, number)
+    end,
+    calculate = function(self, card, context)
+	if G.GAME.used_vouchers.v_observatory and (context.scoring_name == "Full House" or context.scoring_name == "Four of a Kind" or context.scoring_name == "Straight Flush") then
+		local value = G.P_CENTERS.v_observatory.config.extra
+                return {
+                    message = localize{type = 'variable', key = 'a_xmult', vars = {value}},
+                    Xmult_mod = value
+                }
+	end
     end
 }
 local lapio = {
@@ -93,7 +120,7 @@ local lapio = {
     set = "Planet",
     name = "cry-Lapio",
     key = "Lapio",
-    pos = {x=3,y=0},
+    pos = {x=3,y=2},
     config = {hand_types = {'Five of a Kind', 'Flush House', 'Flush Five'}, softlock = true},
     loc_txt = {
         name = 'Lapio',
@@ -104,7 +131,7 @@ local lapio = {
     },
     cost = 4,
 	aurinko = true,
-    atlas = "c_suits",
+    atlas = "atlasnotjokers",
     can_use = function(self, card)
         return true
     end,
@@ -116,6 +143,15 @@ local lapio = {
     end,
     bulk_use = function(self, card, area, copier, number)
         suit_level_up(self, card, area, copier, number)
+    end,
+    calculate = function(self, card, context)
+	if G.GAME.used_vouchers.v_observatory and (context.scoring_name == "Five of a Kind" or context.scoring_name == "Flush House" or context.scoring_name == "Flush Five") then
+		local value = G.P_CENTERS.v_observatory.config.extra
+                return {
+                    message = localize{type = 'variable', key = 'a_xmult', vars = {value}},
+                    Xmult_mod = value
+                }
+	end
     end
 }
 
@@ -126,17 +162,8 @@ function suit_level_up(center, card, area, copier, number)
 	end
 	update_hand_text({sound = 'button', volume = 0.7, pitch = 1.1, delay = 0}, {mult = 0, chips = 0, handname = '', level = ''})
 end
-
-local suits_sprite = {
-	object_type = "Atlas",
-    key = "c_suits",
-    path = "c_cry_suits.png",
-    px = 71,
-    py = 95
-}
-
 return {name = "Planets", 
         init = function()
             
         end,
-        items = {suits_sprite, sydan, klubi, lapio, timantti}}
+        items = {sydan, klubi, lapio, timantti}}

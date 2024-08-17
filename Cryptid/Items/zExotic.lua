@@ -1,3 +1,4 @@
+cry_enable_exotics = false
 local gateway = {
     object_type = "Consumable",
     set = "Spectral",
@@ -41,46 +42,7 @@ local gateway = {
 local gateway_sprite = {
     object_type = "Atlas",
     key = "gateway",
-    
     path = "c_cry_gateway.png",
-    px = 71,
-    py = 95
-}
-local gateway_ex = {
-    object_type = "Consumable",
-    set = "Spectral",
-    name = "cry-Gateway_ex",
-    key = "gateway_ex",
-    pos = {x=0,y=0},
-    soul_pos = {x = 1, y = 0, extra = {x = 2, y = 0}},
-    loc_txt = {
-        name = 'Gateway EX',
-        text = { "Create a random",
-        "{C:cry_exotic,E:1}Exotic{C:attention} Joker{}"
-        }
-    },
-    cost = 250,
-    atlas = "gateway_ex",
-    hidden = true, --default soul_set and soul_rate of 0.3% in spectral packs is used
-    can_use = function(self, card)
-        return true
-    end,
-    use = function(self, card, area, copier)
-        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.4, func = function()
-            play_sound('timpani')
-            local card = create_card('Joker', G.jokers, nil, "cry_exotic", nil, nil, nil, 'cry_gateway')
-            card:add_to_deck()
-            G.jokers:emplace(card)
-            card:juice_up(0.3, 0.5)
-            return true end }))
-        delay(0.6)
-    end
-}
-local gateway_ex_sprite = {
-    object_type = "Atlas",
-    key = "gateway_ex",
-    
-    path = "c_cry_gateway_ex.png",
     px = 71,
     py = 95
 }
@@ -89,7 +51,7 @@ local iterum = {
 	name = "cry-Iterum",
 	key = "iterum",
 	config = {extra = {x_mult = 2, repetitions = 1}},
-	pos = {x = 0, y = 0},
+	pos = {x = 0, y = 1},
 	loc_txt = {
         name = 'Iterum',
         text = {
@@ -100,8 +62,8 @@ local iterum = {
 	rarity = "cry_exotic",
 	cost = 50,
 	blueprint_compat = true,
-	atlas = 'iterum',
-	soul_pos = {x = 1, y = 0, extra = {x = 2, y = 0}},
+	atlas = 'atlasexotic',
+	soul_pos = {x = 1, y = 1, extra = {x = 2, y = 1}},
     loc_vars = function(self, info_queue, center)
         return {vars = {center.ability.extra.x_mult,center.ability.extra.repetitions}}
     end,
@@ -125,20 +87,40 @@ local iterum = {
         end
     end
 }
-local iterum_sprite = {
-    object_type = "Atlas",
-    key = "iterum",
-    
-    path = "j_cry_iterum.png",
-    px = 71,
-    py = 95
-}
+if JokerDisplay then
+    iterum.joker_display_definition = {
+        text = {
+            {
+                border_nodes = {
+                    { text = "X" },
+                    { ref_table = "card.joker_display_values", ref_value = "x_mult" }
+                }
+            }
+        },
+        calc_function = function(card)
+            local count = 0
+            local hand = next(G.play.cards) and G.play.cards or G.hand.highlighted
+            local text, _, scoring_hand = JokerDisplay.evaluate_hand(hand)
+            if text ~= 'Unknown' then
+                for _, scoring_card in pairs(scoring_hand) do
+                    count = count +
+                        JokerDisplay.calculate_card_triggers(scoring_card, scoring_hand)
+                end
+            end
+            card.joker_display_values.x_mult = tonumber(string.format("%.2f", (card.ability.extra.x_mult ^ count)))
+        end,
+        retrigger_function = function(playing_card, scoring_hand, held_in_hand, joker_card)
+            if held_in_hand then return 0 end
+            return joker_card.ability.extra.repetitions or 0
+        end
+    }
+end
 local universum = {
     object_type = "Joker",
 	name = "cry-Universum",
 	key = "universum",
 	config = {extra = 2},
-	pos = {x = 0, y = 0},
+	pos = {x = 3, y = 3},
 	loc_txt = {
         name = 'Universum',
         text = {
@@ -150,8 +132,8 @@ local universum = {
 	rarity = "cry_exotic",
 	cost = 50,
     blueprint_compat = true,
-	atlas = "universum",
-	soul_pos = {x = 1, y = 0, extra = {x = 2, y = 0}},
+	atlas = "atlasexotic",
+	soul_pos = {x = 4, y = 3, extra = {x = 5, y = 3}},
     loc_vars = function(self, info_queue, center)
         return {vars = {center.ability.extra}}
     end,
@@ -161,19 +143,11 @@ local universum = {
         end
     end
 }
-local universum_sprite = {
-    object_type = "Atlas",
-    key = "universum",
-    
-    path = "j_cry_universum.png",
-    px = 71,
-    py = 95
-}
 local exponentia = {
     object_type = "Joker",
 	name = "cry-Exponentia",
 	key = "exponentia",
-	config = {extra = {pow_mult = 1, pow_mult_mod = 0.01}},
+	config = {extra = {Emult = 1, Emult_mod = 0.01}},
 	pos = {x = 0, y = 0},
 	loc_txt = {
         name = 'Exponentia',
@@ -187,33 +161,39 @@ local exponentia = {
 	cost = 50,
     blueprint_compat = true,
 	perishable_compat = false,
-	atlas = "exponentia",
+	atlas = "atlasexotic",
 	soul_pos = {x = 2, y = 0, extra = {x = 1, y = 0}},
 	calculate = function(self, card, context)
-        if context.cardarea == G.jokers and (card.ability.extra.pow_mult > 1) and not context.before and not context.after then
+        if context.cardarea == G.jokers and (to_big(card.ability.extra.Emult) > to_big(1)) and not context.before and not context.after then
             return {
-                message = "^"..card.ability.extra.pow_mult.." Mult",
-                pow_mult_mod = card.ability.extra.pow_mult,
+                message = "^"..number_format(card.ability.extra.Emult).." Mult",
+                Emult_mod = card.ability.extra.Emult,
                 colour = G.C.DARK_EDITION
             }
         end
 	end,
     loc_vars = function(self, info_queue, center)
-        return {vars = {center.ability.extra.pow_mult_mod, center.ability.extra.pow_mult}}
+        return {vars = {center.ability.extra.Emult_mod, center.ability.extra.Emult}}
     end
 }
-local exponentia_sprite = {
-    object_type = "Atlas",
-    key = "exponentia",
-    path = "j_cry_exponentia.png",
-    px = 71,
-    py = 95
-}
+if JokerDisplay then
+    exponentia.joker_display_definition = {
+        text = {
+            {
+                border_nodes = {
+                    { text = "^" },
+                    { ref_table = "card.ability.extra", ref_value = "Emult" }
+                },
+                border_colour = G.C.DARK_EDITION
+            }
+        },
+    }
+end
 local speculo = {
     object_type = "Joker",
 	name = "cry-Speculo",
 	key = "speculo",
-	pos = {x = 0, y = 0},
+	pos = {x = 3, y = 1},
 	loc_txt = {
         name = 'Speculo',
         text = {
@@ -226,8 +206,8 @@ local speculo = {
 	rarity = "cry_exotic",
 	cost = 50,
     blueprint_compat = true,
-	atlas = "speculo",
-	soul_pos = {x = 1, y = 0, extra = {x = 2, y = 0}},
+	atlas = "atlasexotic",
+	soul_pos = {x = 4, y = 1, extra = {x = 5, y = 1}},
 	loc_vars = function(self, info_queue, center)
 		info_queue[#info_queue+1] = G.P_CENTERS.e_negative
 	end,
@@ -253,13 +233,6 @@ local speculo = {
         end
 	end
 }
-local speculo_sprite = {
-    object_type = "Atlas",
-    key = "speculo",
-    path = "j_cry_speculo.png",
-    px = 71,
-    py = 95
-}
 local redeo = {
     object_type = "Joker",
 	name = "cry-Redeo",
@@ -268,20 +241,20 @@ local redeo = {
     loc_vars = function(self, info_queue, center)
         return {vars = {center.ability.extra.ante_reduction, center.ability.extra.money_req, center.ability.extra.money_remaining, center.ability.extra.money_mod}}
     end,
-	pos = {x = 0, y = 0},
+	pos = {x = 3, y = 0},
 	loc_txt = {
         name = 'Redeo',
         text = {
             "{C:attention}-#1#{} Ante when",
             "{C:money}$#2#{} {C:inactive}($#3#){} spent",
-            "{C:inactive,s:0.8}Requirements increase by",
-            "{C:money,s:0.8}$#4#{C:inactive,s:0.8} after each use"
+            "{s:0.8}Requirements increase by",
+            "{C:money,s:0.8}$#4#{s:0.8} after each use"
         }
     },
 	rarity = "cry_exotic",
 	cost = 50,
-	atlas = "redeo",
-	soul_pos = {x = 1, y = 0, extra = {x = 2, y = 0}},
+	atlas = "atlasexotic",
+	soul_pos = {x = 4, y = 0, extra = {x = 5, y = 0}},
 	calculate = function(self, card, context)
         if context.cry_ease_dollars and context.cry_ease_dollars < 0 and not context.blueprint then
             card.ability.extra.money_remaining = card.ability.extra.money_remaining - context.cry_ease_dollars
@@ -298,20 +271,23 @@ local redeo = {
         end
 	end
 }
-local redeo_sprite = {
-    object_type = "Atlas",
-    key = "redeo",
-    path = "j_cry_redeo.png",
-    px = 71,
-    py = 95
-}
-
+if JokerDisplay then
+    redeo.joker_display_definition = {
+        reminder_text = {
+            { text = "($" },
+            { ref_table = "card.ability.extra", ref_value = "money_remaining" },
+            { text = "/$" },
+            { ref_table = "card.ability.extra", ref_value = "money_req" },
+            { text = ")" },
+        },
+    }
+end
 local tenebris = {
 	object_type = "Joker",
 	name = "cry-Tenebris",
 	key = "tenebris",
-	pos = {x = 0, y = 0},
-	soul_pos = {x = 1, y = 0, extra = {x = 2, y = 0}},
+	pos = {x = 3, y = 2},
+	soul_pos = {x = 4, y = 2, extra = {x = 5, y = 2}},
 	config = {extra = {slots = 25, money = 25}},
 	loc_txt = {
       		name = 'Tenebris',
@@ -322,7 +298,7 @@ local tenebris = {
    	},
 	rarity = "cry_exotic",
 	cost = 50,
-	atlas = "tenebris",
+	atlas = "atlasexotic",
 	calc_dollar_bonus = function(self, card)
 		return card.ability.extra.money
 	end,
@@ -336,32 +312,39 @@ local tenebris = {
 		G.jokers.config.card_limit = G.jokers.config.card_limit - card.ability.extra.slots
 	end
 }
-
-local tenebris_sprite = {
-	object_type = "Atlas",
-    key = "tenebris",
-    path = "j_cry_tenebris.png",
-    px = 71,
-    py = 95
-}
-
+if JokerDisplay then
+    tenebris.joker_display_definition = {
+        text = {
+            { text = "+$" },
+            { ref_table = "card.ability.extra", ref_value = "money" },
+        },
+        text_config = { colour = G.C.GOLD },
+        reminder_text = {
+            { ref_table = "card.joker_display_values", ref_value = "localized_text" },
+        },
+        calc_function = function(card)
+            card.joker_display_values.localized_text = "(" .. localize("k_round") .. ")"
+        end
+    }
+end
 local effarcire = {
     object_type = "Joker",
 	name = "cry-Effarcire",
 	key = "effarcire",
 	config = {},
-	pos = {x = 0, y = 0},
-	soul_pos = {x = 1, y = 0, extra = {x = 2, y = 0}},
+	pos = {x = 0, y = 3},
+	soul_pos = {x = 1, y = 3, extra = {x = 2, y = 3}},
 	loc_txt = {
         name = 'Effarcire',
         text = {
-			"Draw {C:green}full deck{} to hand",
-			"when {C:attention}Blind{} is selected"
-		}
-    },
-	rarity = 3,
+    		'Draw {C:green}full deck{} to hand',
+    		'when {C:attention}Blind{} is selected',
+    		'{C:inactive,s:0.8}"If you can\'t handle me at my 1x"',
+    		'{C:inactive,s:0.8}"you don\'t deserve me at my 2x"'
+	}
+	},
 	cost = 50,
-	atlas = 'effarcire',
+	atlas = 'atlasexotic',
 	rarity = "cry_exotic",
 	calculate = function(self, card, context)
 		if not context.blueprint then
@@ -373,21 +356,13 @@ local effarcire = {
 		end
 	end
 }
-
-local effarcire_sprite = {
-    object_type = "Atlas",
-    key = "effarcire",
-    path = "j_cry_effarcire.png",
-    px = 71,
-    py = 95
-}
 local crustulum = {
 	object_type = "Joker",
 	name = "cry-crustulum",
 	key = "crustulum",
 	config = {extra = {chips = 0, chip_mod = 4,}},
-	pos = {x = 0, y = 0},
-	soul_pos = {x = 2, y = 0, extra = {x = 1, y = 0}},
+	pos = {x = 0, y = 2},
+	soul_pos = {x = 2, y = 2, extra = {x = 1, y = 2}},
 	loc_txt = {
         name = 'Crustulum',
         text = {
@@ -399,7 +374,7 @@ local crustulum = {
     	},
 	rarity = "cry_exotic",
 	cost = 50,
-	atlas = "crustulum",
+	atlas = "atlasexotic",
 	blueprint_compat = true,
 	perishable_compat = false,
 	loc_vars = function(self, info_queue, center)
@@ -417,7 +392,7 @@ local crustulum = {
 		G.GAME.current_round.free_rerolls = 1
 		calculate_reroll_cost(true)
 		end
-	if context.cardarea == G.jokers and (card.ability.extra.chips) > 0 and not context.before and not context.after then
+	if context.cardarea == G.jokers and to_big(card.ability.extra.chips) > to_big(0) and not context.before and not context.after then
         return {
             	message = localize{type='variable', key='a_chips', vars={card.ability.extra.chips}},
             	chip_mod = card.ability.extra.chips
@@ -429,20 +404,22 @@ local crustulum = {
 	calculate_reroll_cost(true)
 	end
 }
-local crustulum_sprite = {
-    object_type = "Atlas",
-    key = "crustulum",
-    path = "j_cry_crustulum.png",
-    px = 71,
-    py = 95
-}
---todo: make the pow_mult always prime
+if JokerDisplay then
+    crustulum.joker_display_definition = {
+        text = {
+            { text = "+" },
+            { ref_table = "card.ability.extra", ref_value = "chips" }
+        },
+        text_config = { colour = G.C.CHIPS },
+    }
+end
+--todo: make the Emult always prime
 local primus = {
     object_type = "Joker",
     name = "cry-primus",
     key = "primus",
-    config = {extra = {pow_mult = 1.01, pow_mult_mod = 0.17}},
-    pos = {x = 0, y = 0},
+    config = {extra = {Emult = 1.01, Emult_mod = 0.17}},
+    pos = {x = 0, y = 4},
     loc_txt = {
         name = 'Primus',
         text = {
@@ -456,49 +433,342 @@ local primus = {
     cost = 53,
     blueprint_compat = true,
     perishable_compat = false,
-    atlas = "primus",
-    soul_pos = {x = 2, y = 0, extra = {x = 1, y = 0}},
+    atlas = "atlasexotic",
+    soul_pos = {x = 2, y = 4, extra = {x = 1, y = 4}},
     calculate = function(self, card, context)
         local check = true
-        if context.scoring_hand then
-            for i = 1, #context.full_hand do
-                if context.full_hand[i]:get_id() == 4 or context.full_hand[i]:get_id() == 6 or context.full_hand[i]:get_id() == 8 or context.full_hand[i]:get_id() == 9 or context.full_hand[i]:get_id() == 10 or context.full_hand[i]:get_id() == 11 or context.full_hand[i]:get_id() == 12 or context.full_hand[i]:get_id() == 13 then
-                    check = false
-                end
-            end
+        if context.cardarea == G.jokers and context.before and not context.blueprint then
+			if context.scoring_hand then
+				for k, v in ipairs(context.full_hand) do
+					if v:get_id() == 4 or v:get_id() == 6 or v:get_id() == 8 or v:get_id() == 9 or v:get_id() == 10 or v:get_id() == 11 or v:get_id() == 12 or v:get_id() == 13 then
+						check = false
+					end
+				end
+			end
+			if check then
+				card.ability.extra.Emult = card.ability.extra.Emult + card.ability.extra.Emult_mod
+				return {
+					card_eval_status_text(card, 'extra', nil, nil, nil, {
+						message = "Upgrade!",
+						colour = G.C.DARK_EDITION,
+					})
+				}   
+			end
         end
-        if context.cardarea == G.jokers and check and context.before and not context.blueprint then
-            card.ability.extra.pow_mult = card.ability.extra.pow_mult + card.ability.extra.pow_mult_mod
+        if context.cardarea == G.jokers and (to_big(card.ability.extra.Emult) > to_big(1)) and not context.before and not context.after then
             return {
-                card_eval_status_text(card, 'extra', nil, nil, nil, {
-                    message = "Upgrade!",
-                    colour = G.C.DARK_EDITION,
-                })
-            }   
-        end
-        if context.cardarea == G.jokers and (card.ability.extra.pow_mult > 1) and not context.before and not context.after then
-            return {
-                message = "^"..card.ability.extra.pow_mult.." Mult",
-                pow_mult_mod = card.ability.extra.pow_mult,
+                message = "^"..number_format(card.ability.extra.Emult).." Mult",
+                Emult_mod = card.ability.extra.Emult,
                 colour = G.C.DARK_EDITION
             }
         end
     end,
     loc_vars = function(self, info_queue, center)
-        return {vars = {center.ability.extra.pow_mult_mod, center.ability.extra.pow_mult}}
+        return {vars = {center.ability.extra.Emult_mod, center.ability.extra.Emult}}
     end
 }
-
-local primus_sprite = {
-    object_type = "Atlas",
-    key = "primus",
-    path = "j_cry_primus.png",
-    px = 71,
-    py = 95
-}	
-
+if JokerDisplay then
+    primus.joker_display_definition = {
+        text = {  
+            {
+                border_nodes = {
+                    { text = "^" },
+                    { ref_table = "card.ability.extra", ref_value = "Emult" }
+                },
+                border_colour = G.C.DARK_EDITION
+            }
+        },
+        reminder_text = {
+            { ref_table = "card.joker_display_values", ref_value = "localized_text" },
+        },
+        calc_function = function(card)
+            card.joker_display_values.localized_text = "(" .. localize("Ace", "ranks") .. ",2,3,5,7)"
+        end
+    }
+end
+local big_num_whitelist = {
+    j_ride_the_bus = true,
+    j_egg = true,
+    j_runner = true,
+    j_ice_cream = true,
+    j_constellation = true,
+    j_green_joker = true,
+    j_red_card = true,
+    j_madness = true,
+    j_square = true,
+    j_vampire = true,
+    j_hologram = true,
+    j_obelisk = true,
+    j_turtle_bean = true,
+    j_lucky_cat = true,
+    j_flash = true,
+    j_popcorn = true,
+    j_trousers = true,
+    j_ramen = true,
+    j_castle = true,
+    j_campfire = true,
+    j_throwback = true,
+    j_glass = true,
+    j_wee = true,
+    j_hit_the_road = true,
+    j_caino = true,
+    j_yorick = true,
+    j_cry_dropshot = true,
+    j_cry_wee_fib = true,
+    j_cry_whip = true,
+    j_cry_pickle = true,
+    j_cry_chili_pepper = true,
+    j_cry_cursor = true,
+    j_cry_jimball = true,
+    j_cry_eternalflame = true,
+    j_cry_fspinner = true,
+    j_cry_krustytheclown = true,
+    j_cry_antennastoheaven = true,
+    j_cry_mondrian = true,
+    j_cry_spaceglobe = true,
+    j_cry_m = true,
+    -- j_cry_bonk = true,
+    j_cry_exponentia = true,
+    j_cry_crustulum = true,
+    j_cry_primus = true
+}
+local scalae = {
+    object_type = "Joker",
+    name = "cry-Scalae",
+    key = "Scalae",
+    pos = {x = 3, y = 4},
+    soul_pos = {x = 5, y = 4, extra = {x = 4, y = 4}},
+    loc_txt = {
+        name = 'Scalae',
+        text = {
+            "Scaling {C:attention}Jokers{} scale",
+            "as a degree-{C:attention}#1#{} polynomial",
+            "raise degree by {C:attention}#2#{}",
+			"at end of round",
+            "{C:inactive,s:0.8}({C:attention,s:0.8}Scalae{C:inactive,s:0.8} excluded)"
+        }
+    },
+    rarity = "cry_exotic",
+    cost = 50,
+    atlas = "atlasexotic",
+	config = {extra = {scale = 1, scale_mod = 1, shadow_scale = 1, shadow_scale_mod = 1}},
+    --todo: support jokers that scale multiple variables
+    calculate = function(self, card, context)
+        --initialize tracking object
+        if not G.GAME.cry_double_scale then
+            G.GAME.cry_double_scale = {double_scale = true} --doesn't really matter what's in here as long as there's something
+        end
+		if context.end_of_round and not context.individual and not context.repetition and not context.blueprint then
+			card.ability.extra.scale = card.ability.extra.scale + card.ability.extra.scale_mod
+			card.ability.extra.shadow_scale = card.ability.extra.scale
+			card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
+		end
+        for i = 1, #G.jokers.cards do
+            if G.jokers.cards[i].ability.name ~= "cry-Scalae" then
+                --sort_id is a unique ID for each Joker
+                local jkr = G.jokers.cards[i]
+                if jkr.ability and type(jkr.ability) == 'table' then
+                    if not G.GAME.cry_double_scale[jkr.sort_id] then
+                        G.GAME.cry_double_scale[jkr.sort_id] = {ability = {double_scale = true}}
+                        for k, v in pairs(jkr.ability) do
+                            if type(jkr.ability[k]) ~= 'table' then
+                                G.GAME.cry_double_scale[jkr.sort_id].ability[k] = v
+                            else
+                                G.GAME.cry_double_scale[jkr.sort_id].ability[k] = {}
+                                for _k, _v in pairs(jkr.ability[k]) do
+                                    G.GAME.cry_double_scale[jkr.sort_id].ability[k][_k] = _v
+                                end
+                            end
+                        end
+                    elseif not G.GAME.cry_double_scale[jkr.sort_id].scaler then
+                        dbl_info = G.GAME.cry_double_scale[jkr.sort_id]
+                        if jkr.ability.name == "cry-Number Blocks" then
+                            dbl_info.base = {"extra", "money"}
+                            dbl_info.scaler = {"extra", "money_mod"}
+                            dbl_info.scaler_base = jkr.ability.extra.money_mod
+                            dbl_info.offset = 1
+                            return
+                        end
+                        if jkr.ability.name == "cry-Exponentia" then
+                            dbl_info.base = {"extra", "Emult"}
+                            dbl_info.scaler = {"extra", "Emult_mod"}
+                            dbl_info.scaler_base = jkr.ability.extra.Emult_mod
+                            dbl_info.offset = 1
+                            return
+                        end
+                        if jkr.ability.name == "cry-Redeo" then
+                            dbl_info.base = {"extra", "money_req"}
+                            dbl_info.scaler = {"extra", "money_mod"}
+                            dbl_info.scaler_base = jkr.ability.extra.money_mod
+                            dbl_info.offset = 1
+                            return
+                        end
+                        if jkr.ability.name == "cry-Chili Pepper" then
+                            dbl_info.base = {"extra", "Xmult"}
+                            dbl_info.scaler = {"extra", "Xmult_mod"}
+                            dbl_info.scaler_base = jkr.ability.extra.Xmult_mod
+                            dbl_info.offset = 1
+                            return
+                        end
+                        -- if jkr.ability.name == "cry-Scalae" then
+                        -- 	dbl_info.base = {"extra", "shadow_scale"}
+                        -- 	dbl_info.scaler = {"extra", "shadow_scale_mod"}
+                        -- 	dbl_info.scaler_base = jkr.ability.extra.scale_mod
+                        -- 	dbl_info.offset = 1
+                        -- 	return
+                        -- end
+                        if jkr.ability.name == "Yorick" then
+                            dbl_info.base = {"x_mult"}
+                            dbl_info.scaler = {"extra", "xmult"} --not kidding
+                            dbl_info.scaler_base = 1
+                            dbl_info.offset = 1
+                            return
+                        end
+                        if jkr.ability.name == "Hologram" then
+                            dbl_info.base = {"x_mult"}
+                            dbl_info.scaler = {"extra"}
+                            dbl_info.scaler_base = jkr.ability.extra
+                            dbl_info.offset = 1
+                            return
+                        end
+                        if jkr.ability.name == "Gift Card" then
+                            dbl_info.base = {"extra_value"}
+                            dbl_info.scaler = {"extra"}
+                            dbl_info.scaler_base = jkr.ability.extra
+                            dbl_info.offset = 1
+                            return
+                        end
+                        if jkr.ability.name == "Throwback" then
+                            dbl_info.base = {"x_mult"}
+                            dbl_info.scaler = {"extra"}
+                            dbl_info.scaler_base = jkr.ability.x_mult or 1
+                            dbl_info.offset = 1
+                            return
+                        end
+                        if jkr.ability.name == "Egg" then
+                            dbl_info.base = {"extra_value"}
+                            dbl_info.scaler = {"extra"}
+                            dbl_info.scaler_base = jkr.ability.extra
+                            dbl_info.offset = 1
+                            return
+                        end
+                        for k, v in pairs(jkr.ability) do
+                            --extra_value is ignored because it can be scaled by Gift Card
+                            if k ~= "extra_value" and dbl_info.ability[k] ~= v and is_number(v) and is_number(dbl_info.ability[k]) then
+                                dbl_info.base = {k}
+                                local predicted_mod = math.abs(to_big(v):to_number()-to_big(dbl_info.ability[k]):to_number())
+                                local best_key = {""}
+                                local best_coeff = 10^100
+                                for l, u in pairs(jkr.ability) do
+                                    if l ~= k and is_number(u) then
+                                        if predicted_mod/u >= 0.999 and predicted_mod/u < best_coeff then
+                                            best_coeff = predicted_mod/u
+                                            best_key = {l}
+                                        end
+                                    end
+                                    if type(jkr.ability[l]) == 'table' then
+                                        for _l, _u in pairs(jkr.ability[l]) do 
+                                            if is_number(_u) and predicted_mod/_u >= 0.999 and predicted_mod/_u < best_coeff then
+                                                best_coeff = predicted_mod/_u
+                                                best_key = {l,_l}
+                                            end
+                                        end
+                                    end
+                                end
+                                dbl_info.scaler = best_key
+                            end
+                            if type(jkr.ability[k]) == 'table' and type(dbl_info.ability) == 'table' and type(dbl_info.ability[k]) == 'table' then
+                                for _k, _v in pairs(jkr.ability[k]) do
+                                    if dbl_info.ability[k][_k] ~= _v and is_number(_v) and is_number(dbl_info.ability[k][_k]) then
+                                        dbl_info.base = {k,_k}
+                                        local predicted_mod = math.abs(_v-dbl_info.ability[k][_k])
+                                        local best_key = {""}
+                                        local best_coeff = 10^100
+                                        for l, u in pairs(jkr.ability) do
+                                            if is_number(u) and predicted_mod/u >= 0.999 then
+                                                if predicted_mod/u < best_coeff then
+                                                    best_coeff = predicted_mod/u
+                                                    best_key = {l}
+                                                end
+                                            end
+                                            if type(jkr.ability[l]) == 'table' then
+                                                for _l, _u in pairs(jkr.ability[l]) do 
+                                                    if (l ~= k or _l ~= _k) and is_number(_u) and predicted_mod/_u >= 0.999 then
+                                                        if predicted_mod/_u < best_coeff then
+                                                            best_coeff = predicted_mod/_u
+                                                            best_key = {l,_l}
+                                                        end
+                                                    end
+                                                end
+                                            end
+                                        end
+                                        dbl_info.scaler = best_key
+                                    end
+                                end
+                            end
+                        end
+                        if dbl_info.scaler then
+                            dbl_info.scaler_base = #dbl_info.scaler == 2 and dbl_info.ability[dbl_info.scaler[1]][dbl_info.scaler[2]] or dbl_info.ability[dbl_info.scaler[1]]
+                            dbl_info.offset = 1
+                        end
+                    end
+                    if G.GAME.cry_double_scale[jkr.sort_id] and G.GAME.cry_double_scale[jkr.sort_id].scaler then
+                        --update scaling metadata
+                        dbl_info = G.GAME.cry_double_scale[jkr.sort_id]
+                        local current_val, last_val, scale = 0, 0, 0
+                        if #dbl_info.base == 2 then
+                            if type(jkr.ability) ~= "table" or not jkr.ability[dbl_info.base[1]] or type(jkr.ability[dbl_info.base[1]]) ~= "table" or not jkr.ability[dbl_info.base[1]][dbl_info.base[2]] then return end 
+                            current_val = jkr.ability[dbl_info.base[1]][dbl_info.base[2]]
+                            last_val = dbl_info.ability[dbl_info.base[1]] and dbl_info.ability[dbl_info.base[1]][dbl_info.base[2]] or 1
+                        else
+                            if not jkr.ability[dbl_info.base[1]] then return end
+                            current_val = jkr.ability[dbl_info.base[1]]
+                            last_val = dbl_info.ability[dbl_info.base[1]] or 1
+                        end
+                        if #dbl_info.scaler == 2 then
+                            if not jkr.ability[dbl_info.scaler[1]] or not jkr.ability[dbl_info.scaler[1]][dbl_info.scaler[2]] then return end
+                            scale = jkr.ability[dbl_info.scaler[1]][dbl_info.scaler[2]]
+                        else
+                            if not jkr.ability[dbl_info.scaler[1]] then return end
+                            scale = jkr.ability[dbl_info.scaler[1]]
+                        end
+                        scale_amt = math.abs((current_val-last_val))
+                        local new_scale = (to_big(dbl_info.scaler_base) * ((1 + ((to_big(scale)/to_big(dbl_info.scaler_base))^(to_big(1)/to_big(card.ability.extra.scale))))^card.ability.extra.scale))
+                        if (new_scale < to_big(1e100)) or not ((jkr.config and jkr.config.center and jkr.config.center.key and big_num_whitelist[jkr.config.center.key]) or (jkr.ability and jkr.ability.big_num_scaler)) then
+                            new_scale = new_scale:to_number()
+                        end
+                        if to_big(scale_amt) > to_big(0) then
+                            if #dbl_info.base == 2 then
+                                if not jkr.ability[dbl_info.base[1]] or not jkr.ability[dbl_info.base[1]][dbl_info.base[2]] then return end 
+                                dbl_info.ability[dbl_info.base[1]][dbl_info.base[2]] = jkr.ability[dbl_info.base[1]][dbl_info.base[2]]
+                            else
+                                if not jkr.ability[dbl_info.base[1]] then return end
+                                dbl_info.ability[dbl_info.base[1]] = jkr.ability[dbl_info.base[1]]
+                            end
+                            if #dbl_info.scaler == 2 then
+                                if not jkr.ability[dbl_info.scaler[1]] or not jkr.ability[dbl_info.scaler[1]][dbl_info.scaler[2]] then return end
+                                jkr.ability[dbl_info.scaler[1]][dbl_info.scaler[2]] = new_scale
+                            else
+                                if not jkr.ability[dbl_info.scaler[1]] then return end
+                                jkr.ability[dbl_info.scaler[1]] = new_scale
+                            end
+                            card_eval_status_text(card, 'extra', nil, nil, nil, {message = localize('k_upgrade_ex')})
+                        end
+                    end
+                end
+            end
+        end
+		card.ability.extra.scale = card.ability.extra.shadow_scale
+		card.ability.extra.scale_mod = card.ability.extra.shadow_scale_mod
+        return
+    end,
+	loc_vars = function(self, info_queue, card)
+		return {vars = {number_format(card.ability.extra.scale + 1), number_format(card.ability.extra.scale_mod)}}
+	end
+}
 return {name = "Exotic Jokers", 
         init = function()
+            cry_enable_exotics = true
             --Universum Patches
             local uht = update_hand_text
             function update_hand_text(config, vals)
@@ -605,4 +875,4 @@ return {name = "Exotic Jokers",
                 end
             end
         end,
-        items = {gateway_sprite, gateway_ex_sprite, iterum_sprite, universum_sprite, exponentia_sprite, speculo_sprite, redeo_sprite, tenebris_sprite, effarcire_sprite, crustulum_sprite, primus_sprite, gateway, gateway_ex, iterum, universum, exponentia, speculo, redeo, tenebris, effarcire, crustulum, primus,}}
+        items = {gateway_sprite, gateway, iterum, universum, exponentia, speculo, redeo, tenebris, effarcire, crustulum, primus, scalae,}}

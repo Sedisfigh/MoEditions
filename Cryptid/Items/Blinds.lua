@@ -1,3 +1,4 @@
+
 --extra blind functions for use by bosses
 function Blind:cry_ante_base_mod(dt)
     if not self.disabled then
@@ -41,6 +42,15 @@ function Blind:cry_before_play()
             return obj:cry_before_play()
         end
     end
+end
+function Blind:cry_calc_ante_gain()
+    if not self.disabled then
+        local obj = self.config.blind
+        if obj.cry_calc_ante_gain and type(obj.cry_calc_ante_gain) == 'function' then
+            return obj:cry_calc_ante_gain()
+        end
+    end
+    return 1
 end
 
 local oldox = {
@@ -189,8 +199,8 @@ local oldserpent = {
     loc_txt = {
         name = 'Nostalgic Serpent',
         text = {
-            "Divide Mult by",
-            "level of played poker hand"
+            "Divide Mult by level",
+            "of played poker hand"
         }
     },
     atlas = "nostalgia",
@@ -271,8 +281,8 @@ local oldmark = {
 	loc_txt = {
         name = 'Nostalgic Mark',
         text = {
-            "No hands containing",
-            "a Pair"
+            "No hands that",
+            "contain a Pair"
         }
     },
     atlas = "nostalgia",
@@ -331,7 +341,7 @@ local box = {
     },
     atlas = "blinds",
     boss_colour = HEX('883a3b'),
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
     if (card.area == G.jokers) and not G.GAME.blind.disabled and card.config.center.rarity == 1 then
         return true
     end
@@ -353,6 +363,11 @@ local clock = {
         text = {
             "+0.1X blind requirements every",
             "3 seconds spent this ante"
+        }
+    },
+    config = {
+        tw_bl = {
+            ignore = true
         }
     },
     atlas = "blinds",
@@ -419,11 +434,23 @@ local joke = {
         name = 'The Joke',
         text = {
             "If score is >2X requirements,",
-            "set ante to multiple of 8"
+            "set ante to multiple of #1#"
         }
     },
     atlas = "blinds",
-    boss_colour = HEX('00ffaa')
+    boss_colour = HEX('00ffaa'),
+    loc_vars = function(self, info_queue, card)
+		return { vars = {G.GAME.win_ante} }
+	end,
+    cry_calc_ante_gain = function(self)
+        if to_big(G.GAME.chips) >= to_big(G.GAME.blind.chips) * 2 then
+            if G.GAME.round_resets.ante == 1 then 
+                G.GAME.cry_ach_conditions.the_jokes_on_you_triggered = true 
+            end
+            return G.GAME.win_ante-G.GAME.round_resets.ante%G.GAME.win_ante
+        end
+        return 1
+    end
 }
 local hammer = {
     object_type = "Blind",
@@ -443,7 +470,7 @@ local hammer = {
     },
     atlas = "blinds",
     boss_colour = HEX('ffabd6'),
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
         if card.area ~= G.jokers and not G.GAME.blind.disabled then
             if card.ability.effect ~= 'Stone Card' and (card.base.value == '3' or card.base.value == '5' or card.base.value == '7' or card.base.value == '9' or card.base.value == 'Ace') then
                 return true
@@ -470,7 +497,7 @@ local windmill = {
     },
     atlas = "blinds",
     boss_colour = HEX('f70000'),
-    debuff_card = function(self, card, from_blind)
+    recalc_debuff = function(self, card, from_blind)
     if (card.area == G.jokers) and not G.GAME.blind.disabled and card.config.center.rarity == 2 then
         return true
     end
@@ -519,11 +546,21 @@ local lavender_loop = {
     },
     atlas = "blinds",
     boss_colour = HEX('ae00ff'),
+    set_blind = function(self, reset, silent)
+        G.GAME.cry_ach_conditions.patience_virtue_timer = 120
+    end,
     disable = function(self, silent)
         G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante)*G.GAME.starting_params.ante_scaling*2
         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+        G.GAME.cry_ach_conditions.patience_virtue_earnable = false
+        G.GAME.cry_ach_conditions.patience_virtue_earnable = nil
     end,
     cry_round_base_mod = function(self, dt)
+        if G.GAME.cry_ach_conditions.patience_virtue_timer > 0 and G.GAME.cry_ach_conditions.patience_virtue_earnable ~= true then
+            G.GAME.cry_ach_conditions.patience_virtue_timer = G.GAME.cry_ach_conditions.patience_virtue_timer - dt*(G.GAME.modifiers.cry_rush_hour_iii and 0.5 or 1)
+        elseif G.GAME.current_round.hands_played == 0 then
+            G.GAME.cry_ach_conditions.patience_virtue_earnable = true
+        end
         return 1.25^(dt/1.5)
     end
 }
@@ -594,7 +631,7 @@ local sapphire_stamp = {
         end
     end,
     defeat = function(self, silent)
-        if not self.disabled then
+        if not G.GAME.blind.disabled then
             G.hand.config.highlighted_limit = G.hand.config.highlighted_limit - 1
         end
     end,
@@ -747,7 +784,7 @@ local obsidian_orb = {
                     end
                     for i = 1, 2 do
                         if G.hand.cards[i] then 
-                            local selected_card, card_key = pseudorandom_element(_cards, pseudoseed('hook'))
+                            local selected_card, card_key = pseudorandom_element(_cards, pseudoseed('ObsidianOrb'))
                             G.hand:add_to_highlighted(selected_card, true)
                             table.remove(_cards, card_key)
                             any_selected = true
@@ -878,7 +915,7 @@ local obsidian_orb = {
                 end
                 if not any_forced then 
                     G.hand:unhighlight_all()
-                    local forced_card = pseudorandom_element(G.hand.cards, pseudoseed('cerulean_bell'))
+                    local forced_card = pseudorandom_element(G.hand.cards, pseudoseed('ObsidianOrb'))
                     forced_card.ability.forced_selection = true
                     G.hand:add_to_highlighted(forced_card)
                 end
@@ -889,11 +926,11 @@ local obsidian_orb = {
                     if not G.jokers.cards[i].debuff or #G.jokers.cards < 2 then jokers[#jokers+1] =G.jokers.cards[i] end
                     G.jokers.cards[i]:set_debuff(false)
                 end 
-                local _card = pseudorandom_element(jokers, pseudoseed('crimson_heart'))
+                local _card = pseudorandom_element(jokers, pseudoseed('ObsidianOrb'))
                 if _card then
                     _card:set_debuff(true)
                     _card:juice_up()
-                    self:wiggle()
+                    G.GAME.blind:wiggle()
                 end
             end
         end
@@ -903,7 +940,7 @@ local obsidian_orb = {
             s = G.P_BLINDS[k]
             if s.stay_flipped and s:stay_flipped(area, card) then return true end
             if area == G.hand then
-                if s.name == 'The Wheel' and pseudorandom(pseudoseed('wheel')) < G.GAME.probabilities.normal/7 then
+                if s.name == 'The Wheel' and pseudorandom(pseudoseed('ObsidianOrb')) < G.GAME.probabilities.normal/7 then
                     return true
                 end
                 if s.name == 'The House' and G.GAME.current_round.hands_played == 0 and G.GAME.current_round.discards_used == 0 then
@@ -982,6 +1019,16 @@ local obsidian_orb = {
         end
         return score
     end,
+    cry_calc_ante_gain = function(self)
+        local ante = 1
+        for k, _ in pairs(G.GAME.defeated_blinds) do
+            s = G.P_BLINDS[k]
+            if s.cry_calc_ante_gain then
+                ante = math.max(ante,s:cry_calc_ante_gain())
+            end
+        end
+        return ante
+    end,
     cry_before_play = function(self)
         for k, _ in pairs(G.GAME.defeated_blinds) do
             s = G.P_BLINDS[k]
@@ -1029,6 +1076,13 @@ local nostalgia_sprites = {
     py = 34,
     frames = 21
 }
+
+local items_togo = {oldox, oldhouse, oldarm, oldfish, oldmanacle, oldserpent, oldpillar, oldflint, oldmark, tax, trick, joke, hammer, box, windmill, vermillion_virus, sapphire_stamp, obsidian_orb, blind_sprites, nostalgia_sprites}
+
+if Cryptid_config["Timer Mechanics"] then
+	table.insert(items_togo, clock)
+	table.insert(items_togo, lavender_loop)
+end
 
 return {name = "Blinds", 
         init = function()
@@ -1102,7 +1156,9 @@ return {name = "Blinds",
             local sr = Game.start_run
             function Game:start_run(args)
                 sr(self, args)
-                G.P_BLINDS.bl_cry_clock.mult = 0
+				if G.P_BLINDS.bl_cry_clock then
+					G.P_BLINDS.bl_cry_clock.mult = 0
+				end
                 if not G.GAME.defeated_blinds then G.GAME.defeated_blinds = {} end
             end
             --patch for multiple Clocks to tick separately and load separately
@@ -1111,16 +1167,18 @@ return {name = "Blinds",
                 local c = "Boss"
                 if string.sub(G.GAME.subhash or '', -1) == 'S' then c = "Small" end
                 if string.sub(G.GAME.subhash or '', -1) == 'B' then c = "Big" end
-                if G.GAME.CRY_BLINDS and G.GAME.CRY_BLINDS[c] and not y and blind and blind.mult then blind.mult = G.GAME.CRY_BLINDS[c] end
+                if G.GAME.CRY_BLINDS and G.GAME.CRY_BLINDS[c] and not y and blind and blind.mult and blind.cry_ante_base_mod then blind.mult = G.GAME.CRY_BLINDS[c] end
                 bsb(self, blind, y, z)
             end
             local rb = reset_blinds
             function reset_blinds()
                 if G.GAME.round_resets.blind_states.Boss == 'Defeated' then
                     G.GAME.CRY_BLINDS = {}
-                    G.P_BLINDS.bl_cry_clock.mult = 0
+					if G.P_BLINDS.bl_cry_clock then
+						G.P_BLINDS.bl_cry_clock.mult = 0
+					end
                 end
                 rb()
             end
         end,
-        items = {oldox, oldhouse, oldarm, oldfish, oldmanacle, oldserpent, oldpillar, oldflint, oldmark, tax, clock, trick, joke, hammer, box, windmill, lavender_loop, vermillion_virus, sapphire_stamp, obsidian_orb, blind_sprites, nostalgia_sprites}}
+        items = items_togo}

@@ -1,3 +1,4 @@
+
 local atlasenchanced = {
     object_type = "Atlas",
     key = "atlasenchanced",
@@ -14,14 +15,14 @@ local hierophant_deck = {object_type = "Back",
 	loc_txt = {
         name = "The Hierophant's Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Bonus Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Bonus Cards{}",
             "Cards cannot change enhancements"
         }
     },
 }
 local empress_deck = {object_type = "Back",
-    name = "cry-The Empress's Deck",
+    name = "cry-The Empress' Deck",
     key = "empress_deck",
 	config = {cry_force_enhancement = "m_mult"},
     atlas = "atlasenchanced",
@@ -29,8 +30,8 @@ local empress_deck = {object_type = "Back",
 	loc_txt = {
         name = "The Empress's Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Mult Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Mult Cards{}",
             "Cards cannot change enhancements"
         }
     },
@@ -44,8 +45,8 @@ local lovers_deck = {object_type = "Back",
 	loc_txt = {
         name = "The Lovers' Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Wild Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Wild Cards{}",
             "Cards cannot change enhancements"
         }
     },
@@ -59,11 +60,27 @@ local justice_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of Justice",
         text = {
-            "Start with a deck",
-            "of {C:attention}Glass Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Glass Cards{}",
             "Cards cannot change enhancements"
         }
     },
+}
+local eclipse_deck = {object_type = "Back",
+    name = "cry-The Eclipse's Deck",
+    key = "eclipse_deck",
+	config = {cry_force_enhancement = "m_cry_echo"},
+	pos = {x = 1, y = 5},
+    atlas = "atlasenchanced",
+	loc_txt = {
+        name = "The Eclipse's Deck",
+        text = {
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Echo Cards{}",
+            "Cards cannot change enhancements"
+        }
+    },
+    
 }
 local chariot_deck = {object_type = "Back",
     name = "cry-The Chariot's Deck",
@@ -73,8 +90,8 @@ local chariot_deck = {object_type = "Back",
 	loc_txt = {
         name = "The Chariot's Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Steel Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Steel Cards{}",
             "Cards cannot change enhancements"
         }
     },
@@ -88,8 +105,8 @@ local tower_deck = {object_type = "Back",
 	loc_txt = {
         name = "Stoner's Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Stone Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Stone Cards{}",
             "Cards cannot change enhancements"
         }
     },
@@ -103,8 +120,8 @@ local devil_deck = {object_type = "Back",
 	loc_txt = {
         name = "The Devil's Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Gold Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Gold Cards{}",
             "Cards cannot change enhancements"
         }
     },
@@ -118,8 +135,8 @@ local magician_deck = {object_type = "Back",
 	loc_txt = {
         name = "The Magician's Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Lucky Cards{}",
+            "All {C:attention}playing cards{}",
+            "are {C:attention}Lucky Cards{}",
             "Cards cannot change enhancements"
         }
     },
@@ -133,8 +150,7 @@ local foil_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of Chips",
         text = {
-            "Start with a deck",
-            "of {C:attention}Foil Cards{}",
+            "All cards are {C:dark_edition}Foil{}",
             "Cards cannot change editions"
         }
     },
@@ -148,8 +164,7 @@ local holo_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of Mult",
         text = {
-            "Start with a deck",
-            "of {C:attention}Holographic Cards{}",
+            "All cards are {C:dark_edition}Holographic{}",
             "Cards cannot change editions"
         }
     },
@@ -163,8 +178,7 @@ local poly_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of XMult",
         text = {
-            "Start with a deck",
-            "of {C:attention}Polychrome Cards{}",
+            "All cards are {C:dark_edition}Polychrome{}",
             "Cards cannot change editions"
         }
     },
@@ -178,8 +192,7 @@ local nega_deck = {object_type = "Back",
 	loc_txt = {
         name = "Negative Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Negative Cards{}",
+            "All cards are {C:dark_edition}Negative{}",
             "Cards cannot change editions"
         }
     },
@@ -194,8 +207,7 @@ local astral_deck = {object_type = "Back",
 	loc_txt = {
         name = "Astral Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Astral Cards{}",
+            "All cards are {C:dark_edition}Astral",
             "Cards cannot change editions"
         }
     },
@@ -209,8 +221,7 @@ local blurred_deck = {object_type = "Back",
 	loc_txt = {
         name = "Blurred Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Blurred Cards{}",
+            "All cards are {C:dark_edition}Blurred{}",
             "Cards cannot change editions"
         }
     },
@@ -224,8 +235,7 @@ local mosaic_deck = {object_type = "Back",
 	loc_txt = {
         name = "Mosaic Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Mosaic Cards{}",
+            "All cards are {C:dark_edition}Mosaic{}",
             "Cards cannot change editions"
         }
     },
@@ -239,8 +249,7 @@ local oversat_deck = {object_type = "Back",
 	loc_txt = {
         name = "Oversaturated Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Oversaturated Cards{}",
+            "All cards are {C:dark_edition}Oversaturated{}",
             "Cards cannot change editions"
         }
     },
@@ -254,10 +263,9 @@ local glitched_deck = {object_type = "Back",
 	loc_txt = {
         name = "Glitched Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Glitched Cards{}",
+            "All cards are {C:dark_edition}Glitched{}",
             "Cards cannot change editions",
-			"{s:0.6}isn't this just misprint deck{}"
+            "{s:0.8,C:inactive}Wait, isn't this just Misprint Deck?"
         }
     },
 }
@@ -270,8 +278,7 @@ local talisman_deck = {object_type = "Back",
 	loc_txt = {
         name = "Talisman Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Gold Seal Cards{}",
+            "All cards have a {C:attention}Gold Seal{}",
             "Cards cannot change seals"
         }
     },
@@ -285,8 +292,7 @@ local deja_vu_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deja Vu Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Red Seal Cards{}",
+            "All cards have a {C:red}Red Seal{}",
             "Cards cannot change seals"
         }
     },
@@ -300,8 +306,7 @@ local trance_deck = {object_type = "Back",
 	loc_txt = {
         name = "Trance Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Blue Seal Cards{}",
+            "All cards have a {C:blue}Blue Seal{}",
             "Cards cannot change seals"
         }
     },
@@ -315,12 +320,25 @@ local medium_deck = {object_type = "Back",
 	loc_txt = {
         name = "Medium Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Purple Seal Cards{}",
+            "All cards have a {C:purple}Purple Seal{}",
             "Cards cannot change seals"
         }
     },
     atlas = "atlasenchanced"
+}
+local typhoon_deck = {object_type = "Back",
+    name = "cry-Typhoon Deck",
+    key = "typhoon_deck",
+	config = {cry_force_seal = 's_cry_azure'},
+	pos = {x = 0, y = 2},
+	loc_txt = {
+        name = "Typhoon Deck",
+        text = {
+            "All cards have an {C:cry_azure}Azure Seal{}",
+            "Cards cannot change seals"
+        }
+    },
+    
 }
 local eternal_deck = {object_type = "Back",
     name = "cry-Eternal Deck",
@@ -331,8 +349,7 @@ local eternal_deck = {object_type = "Back",
 	loc_txt = {
         name = "Eternal Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Eternal Cards{}"
+            "All cards are {C:attention}Eternal{}"
         }
     },
 }
@@ -345,8 +362,7 @@ local perishable_deck = {object_type = "Back",
 	loc_txt = {
         name = "Perishable Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Perishable Cards{}"
+            "All cards are {C:attention}Perishable{}"
         }
     },
 }
@@ -359,8 +375,33 @@ local rental_deck = {object_type = "Back",
 	loc_txt = {
         name = "Rental Deck",
         text = {
-            "Start with a deck",
-            "of {C:attention}Rental Cards{}"
+            "All cards are {C:attention}Rental{}"
+        }
+    },
+}
+local banana_deck = {object_type = "Back",
+    name = "cry-Banana Deck",
+    key = "banana_deck",
+	config = {cry_force_sticker = 'banana'},
+	pos = {x = 5, y = 4},
+    atlas = "atlasenchanced",
+	loc_txt = {
+        name = "Banana Deck",
+        text = {
+            "All cards are {C:attention}Banana{}"
+        }
+    },
+}
+local pinned_deck = {object_type = "Back",
+    name = "cry-Pinned Deck",
+    key = "pinned_deck",
+	config = {cry_force_sticker = 'pinned'},
+	pos = {x = 0, y = 5},
+    atlas = "atlasenchanced",
+	loc_txt = {
+        name = "Pinned Deck",
+        text = {
+            "All cards are {C:attention}Pinned{}"
         }
     },
 }
@@ -372,7 +413,7 @@ local world_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of The World",
         text = {
-            "All cards in deck are {C:spade}Spades{}",
+            "All playing cards are {C:spade}Spades{}",
             "and cannot change suits",
             "{C:attention}The Goad{} cannot appear"
         }
@@ -387,7 +428,7 @@ local star_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of The Stars",
         text = {
-            "All cards in deck are {C:diamond}Diamonds{}",
+            "All playing cards are {C:diamond}Diamonds{}",
             "and cannot change suits",
             "{C:attention}The Window{} cannot appear"
         }
@@ -402,7 +443,7 @@ local sun_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of The Sun",
         text = {
-            "All cards in deck are {C:heart}Hearts{}",
+            "All playing cards are {C:heart}Hearts{}",
             "and cannot change suits",
             "{C:attention}The Head{} cannot appear"
         }
@@ -417,7 +458,7 @@ local moon_deck = {object_type = "Back",
 	loc_txt = {
         name = "Deck of The Moon",
         text = {
-            "All cards in deck are {C:club}Clubs{}",
+            "All playing cards are {C:club}Clubs{}",
             "and cannot change suits",
             "{C:attention}The Club{} cannot appear"
         }
@@ -458,7 +499,7 @@ return {name = "Enhanced Decks",
                     }))
                 end
                 if self.effect.config.cry_force_edition then
-                    if self.effect.config.cry_force_edition ~= 'random' then G.GAME.modifiers.cry_force_edition = self.effect.config.cry_force_edition end
+                    if self.effect.config.cry_force_edition ~= 'random' then G.GAME.modifiers.cry_force_edition = self.effect.config.cry_force_edition else G.GAME.modifiers.cry_force_random_edition = true end
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             for c = #G.playing_cards, 1, -1 do
@@ -502,6 +543,7 @@ return {name = "Enhanced Decks",
                     }))
                 end
                 if self.effect.config.cry_force_sticker then
+                    G.GAME.modifiers.cry_force_sticker = self.effect.config.cry_force_sticker
                     G.E_MANAGER:add_event(Event({
                         func = function()
                             for c = #G.playing_cards, 1, -1 do
@@ -552,8 +594,8 @@ return {name = "Enhanced Decks",
             end
         end,
         items = {atlasenchanced,
-hierophant_deck, empress_deck, lovers_deck, justice_deck, chariot_deck, tower_deck, devil_deck, magician_deck,
+hierophant_deck, empress_deck, lovers_deck, justice_deck, eclipse_deck, chariot_deck, tower_deck, devil_deck, magician_deck,
 foil_deck, holo_deck, poly_deck, nega_deck, astral_deck, mosaic_deck, oversat_deck, glitched_deck, blurred_deck,
-talisman_deck, deja_vu_deck, trance_deck, medium_deck,
-eternal_deck, perishable_deck, rental_deck,
+talisman_deck, deja_vu_deck, trance_deck, medium_deck, typhoon_deck,
+eternal_deck, perishable_deck, rental_deck, banana_deck, pinned_deck,
 star_deck, moon_deck, sun_deck, world_deck}}
