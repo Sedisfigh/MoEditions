@@ -298,7 +298,7 @@ local glitchoversat = {
     in_shop = true,
     extra_cost = 9,
     sound = {
-        sound = 'cry_e_glitchoversat',
+        sound = 'cry_e_glitched',
         per = 1,
         vol = 0.25
     },

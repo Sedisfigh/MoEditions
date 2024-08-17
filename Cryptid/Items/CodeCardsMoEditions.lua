@@ -1,3 +1,5 @@
+
+
 local code_moeditions_atlas = {
     object_type = "Atlas",
     key = "codemoeditions",
@@ -92,19 +94,101 @@ local encoding = {
     name = "cry-Encoding",
     key = "encoding",
     pos = {x=0,y=0},
-	config = {},
+	config = {info = 'Select a joker with an edition'},
     loc_txt = {
         name = '://ENCODING',
         text = {
 			"Upgrade the tier of an edition on a {C:dark_edition}joker{}.",
-                        "Cost {C:gold}40${}, increase by {C:gold]}20${}",
-                        "per tier level (increase by {X:gold,C:white}X10{}",
-                        "for astral tiers)"
+			"{C:inactive}#1#{}"
         }
     },
+    loc_vars = function(self, info_queue, center)
+        return {vars = {self.config.info}}
+    end,
     cost = 4,
     atlas = "codemoeditions",
     can_use = function(self, card)
+        if #G.jokers.highlighted == 0 then
+            self.config.info = 'Select a joker with an edition'
+        elseif #G.jokers.highlighted == 1 and G.jokers.highlighted[1].edition then
+            if G.jokers.highlighted[1].edition.cry_astral then
+                self.config.info = 'Astral -> Hyperastral, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_hyperastral then
+                self.config.info = 'Hyperastral -> Cosmic, cost : 400$'
+            elseif G.jokers.highlighted[1].edition.cry_cosmic then
+                self.config.info = 'Cosmic -> Hypercosmic, cost : 4000$'
+            elseif G.jokers.highlighted[1].edition.cry_hypercosmic then
+                self.config.info = 'Hypercosmic -> Darkmatter, cost : 40000$'
+            elseif G.jokers.highlighted[1].edition.cry_darkmatter then
+                self.config.info = 'Darkmatter -> Darkvoid, cost : 400000$'
+            elseif G.jokers.highlighted[1].edition.cry_root then
+                self.config.info = 'Root -> Astral, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.cry_ultraopposite then
+                self.config.info = 'Ultra Opposite -> Hyper Opposite, cost : 80$'
+            elseif G.jokers.highlighted[1].edition.cry_superopposite then
+                self.config.info = 'Super Opposite -> Ultra Opposite, cost : 60$'
+            elseif G.jokers.highlighted[1].edition.cry_opposite then
+                self.config.info = 'Opposite -> Super Opposite, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_eraser then
+                self.config.info = 'Eraser -> Opposite, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.cry_mosaic then
+                self.config.info = 'Mosaic -> Sparkle, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.bunc_glitter then
+                self.config.info = 'Glitter -> Mosaic, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.cry_duplicated then
+                self.config.info = 'Duplicated -> Brilliant, cost : 60$'
+            elseif G.jokers.highlighted[1].edition.polychrome then
+                self.config.info = 'Polychrome -> Duplicated, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.bunc_burnt then
+                self.config.info = 'Burnt -> Polychrome, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.cry_ultraglitch then
+                self.config.info = 'Ultra Glitch -> Absolute Glitch, cost : 80$'
+            elseif G.jokers.highlighted[1].edition.cry_glitchoversat then
+                self.config.info = 'Glitched & Oversaturated -> Ultra Glitch, cost : 60$'
+            elseif G.jokers.highlighted[1].edition.cry_oversat then
+                self.config.info = 'Oversaturated -> Glitched & Oversaturated, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_glitched then
+                self.config.info = 'Glitched -> Glitched & Oversaturated, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_blind then
+                self.config.info = 'Blind -> Eyesless, cost : 60$'
+            elseif G.jokers.highlighted[1].edition.cry_blur then
+                self.config.info = 'Blurred -> Blind, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_pocketedition then
+                self.config.info = 'Pocket Edition -> Limited Edition, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_trash then
+                self.config.info = 'Trash -> Pocket Edition, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.cry_greedy then
+                self.config.info = 'Greedy -> Foil, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.cry_bailiff then
+                self.config.info = 'Bailiff -> Holographic, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.foil then
+                self.config.info = 'Foil -> Blister, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_golden then
+                self.config.info = 'Golden -> Ultra Golden, cost : 80$'
+            elseif G.jokers.highlighted[1].edition.cry_titanium then
+                self.config.info = 'Titanium -> Golden, cost : 60$'
+            elseif G.jokers.highlighted[1].edition.cry_metallic then
+                self.config.info = 'Metallic -> Titanium, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_rainbow then
+                self.config.info = 'Rainbow -> Hyperchrome, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_shadowing then
+                self.config.info = 'Shadowing -> Graymatter, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.cry_hardstone then
+                self.config.info = 'Hardstone -> Bedrock, cost : 60$'
+            elseif G.jokers.highlighted[1].edition.holo then
+                self.config.info = 'Holographic -> Hardstone, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.bunc_fluorescent then
+                self.config.info = 'Fluorescent -> Negative, cost : 40$'
+            elseif G.jokers.highlighted[1].edition.phantom then
+                self.config.info = 'Phantom -> Negative, cost : 20$'
+            elseif G.jokers.highlighted[1].edition.kraken then
+                self.config.info = 'Kraken -> Cthulhu, cost : 1e20$'
+            elseif G.jokers.highlighted[1].edition.tentacle then
+                self.config.info = 'Tentacle -> Kraken, cost : 1e7$'
+            else
+                self.config.info = 'Unavailable'
+            end
+        end
         return #G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition and ((#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_astral and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_hyperastral and G.GAME.dollars >= 400) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_cosmic and G.GAME.dollars >= 4000) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_hypercosmic and G.GAME.dollars >= 40000) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_darkmatter and G.GAME.dollars >= 400000) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_eraser and G.GAME.dollars >= 20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_opposite and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_superopposite and G.GAME.dollars >= 60) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_ultraopposite and G.GAME.dollars >= 80) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_mosaic and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.polychrome and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_duplicated and G.GAME.dollars >= 60) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_glitched and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_oversat and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_glitchoversat and G.GAME.dollars >= 60) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_ultraglitch and G.GAME.dollars >= 80) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_blur and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_blind and G.GAME.dollars >= 60) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_pocketedition and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_trash and G.GAME.dollars >= 20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_greedy and G.GAME.dollars >= 20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_bailiff and G.GAME.dollars >= 20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.foil and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_metallic and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_rainbow and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_shadowing and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.holo and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_hardstone and G.GAME.dollars >= 60) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_titanium and G.GAME.dollars >= 60) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_root and G.GAME.dollars >= 20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.cry_golden and G.GAME.dollars >= 80) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.bunc_glitter and G.GAME.dollars >= 20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.bunc_fluorescent and G.GAME.dollars >= 40) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.phantom and G.GAME.dollars >= 20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.tentacle and G.GAME.dollars >= 1e+7) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.kraken and G.GAME.dollars >= 1e+20) or (#G.jokers.highlighted + #G.hand.highlighted == 1 and G.jokers.highlighted[1] and G.jokers.highlighted[1].edition.bunc_burnt and G.GAME.dollars >= 20))
     end,
     use = function(self, card, area, copier)
@@ -412,20 +496,178 @@ local encoding_advanced = {
     name = "cry-Encoding_advanced",
     key = "encoding_advanced",
     pos = {x=1,y=0},
-	config = {},
+	config = {info = '', info2 = '', info3 = '', info4 = '', info5 = '', info6 = ''},
     loc_txt = {
         name = '://ENCODING_ADVANCED',
         text = {
-			"Merges editions from the leftmost 2 {C:dark_edition}jokers{}.",
-                        "Cost {C:gold}80${}",
+			"Merges editions from the leftmost 2 {C:dark_edition}jokers{}. Cost {C:gold}80${}",
+                        "{C:inactive}#1#{}",
+                        "{C:inactive}#2#{}",
+                        "{C:inactive}#3#{}",
+                        "{C:inactive}#4#{}",
+                        "{C:inactive}#5#{}",
+                        "{C:inactive}#6#{}"
         }
     },
+    loc_vars = function(self, info_queue, center)
+        return {vars = {self.config.info, self.config.info2, self.config.info3, self.config.info4, self.config.info5, self.config.info6}}
+    end,
     cost = 8,
     atlas = "codemoeditions",
 
 -- La première parenthèse correspond à la liste des conditions lorsqu'il y a deux éditions sur les deux jokers les plus à gauche.
 
     can_use = function(self, card)
+        if G.jokers.cards[1] and G.jokers.cards[1].edition then
+            if G.jokers.cards[1].edition.polychrome then
+                self.config.info = 'Polychrome + Blister = Galvanized'
+                self.config.info2 = 'Polychrome + Astral = Chromatic Astral'
+                self.config.info3 = 'Polychrome + Ultra Shiny = Rainbow'
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_blister then
+                self.config.info = 'Blister + Polychrome = Galvanized'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_cosmic then
+                self.config.info = 'Cosmic + Brilliant = Chromatic Platinum'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_brilliant then
+                self.config.info = 'Brilliant + Cosmic = Chromatic Platinum'
+                self.config.info2 = 'Brilliant + Impulsion = Chromatic Impulsion'
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_expensive then
+                self.config.info = 'Expensive + Shiny = Metallic'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_shiny then
+                self.config.info = 'Shiny + Expensive = Metallic'
+                self.config.info2 = 'Shiny + Catalyst = Ultrashiny'
+                self.config.info3 = 'Shiny + Galvanized = Galvanized (Shiny)'
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_balavirus then
+                self.config.info = 'Balavirus + Chromatic Platinum = Omnichromatic'
+                self.config.info2 = 'Balavirus + Psychedelic = Psychedelic (Balavirus)'
+                self.config.info3 = 'Balavirus + Darkvoid = Darkvoid (Balavirus)'
+                self.config.info4 = 'Balavirus + Eyesless = Eyesless (Balavirus)'
+                self.config.info5 = 'Balavirus + Absolute Glitch = Absolute Glitch (Balavirus)'
+                self.config.info6 = 'Balavirus + Balavirus = Balavirus [Square]'
+            elseif G.jokers.cards[1].edition.cry_psychedelic then
+                self.config.info = 'Psychedelic + Balavirus = Psychedelic (Balavirus)'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_darkvoid then
+                self.config.info = 'Darkvoid + Balavirus = Darkvoid (Balavirus)'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_eyesless then
+                self.config.info = 'Eyesless + Balavirus = Eyesless (Balavirus)'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_absoluteglitch then
+                self.config.info = 'Absolute Glitch + Balavirus = Absolute Glitch (Balavirus)'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_chromaticplatinum then
+                self.config.info = 'Chromatic Platinum + Balavirus = Omnichromatic'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_astral then
+                self.config.info = 'Astral + Polychrome = Chromatic Astral'
+                self.config.info2 = 'Astral + Metallic = Impulsion'
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_tvghost then
+                self.config.info = 'TV Ghost + Sparkle = Noisy'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_sparkle then
+                self.config.info = 'Sparkle + TV Ghost = Noisy'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_ultrashiny then
+                self.config.info = 'Ultrashiny + Polychrome = Rainbow'
+                self.config.info2 = 'Ultrashiny + Catalyst = Balavirus'
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_metallic then
+                self.config.info = 'Metallic + Astral = Impulsion'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_impulsion then
+                self.config.info = 'Impulsion + Brilliant = Chromatic Impulsion'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_catalyst then
+                self.config.info = 'Catalyst + Shiny = Ultrashiny'
+                self.config.info2 = 'Catalyst + Ultrashiny = Balavirus'
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            elseif G.jokers.cards[1].edition.cry_galvanized then
+                self.config.info = 'Galvanized + Shiny = Galvanized (Shiny)'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+	    else
+	        self.config.info = 'Unavailable'
+                self.config.info2 = ''
+                self.config.info3 = ''
+                self.config.info4 = ''
+                self.config.info5 = ''
+                self.config.info6 = ''
+            end
+        end
         return G.GAME.dollars >=80 and G.jokers.cards[1].edition and G.jokers.cards[2].edition and ((G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.polychrome and G.jokers.cards[2].edition.cry_blister) or (G.jokers.cards[1].edition.cry_blister and G.jokers.cards[2].edition.polychrome))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_cosmic and G.jokers.cards[2].edition.cry_brilliant) or (G.jokers.cards[1].edition.cry_brilliant and G.jokers.cards[2].edition.cry_cosmic))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_expensive and G.jokers.cards[2].edition.cry_shiny) or (G.jokers.cards[1].edition.cry_shiny and G.jokers.cards[2].edition.cry_expensive))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_balavirus and G.jokers.cards[2].edition.cry_chromaticplatinum) or (G.jokers.cards[1].edition.cry_chromaticplatinum and G.jokers.cards[2].edition.cry_balavirus))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_astral and G.jokers.cards[2].edition.polychrome) or (G.jokers.cards[1].edition.polychrome and G.jokers.cards[2].edition.cry_astral))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_tvghost and G.jokers.cards[2].edition.cry_sparkle) or (G.jokers.cards[1].edition.cry_sparkle and G.jokers.cards[2].edition.cry_tvghost))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.polychrome and G.jokers.cards[2].edition.cry_ultrashiny) or (G.jokers.cards[1].edition.cry_ultrashiny and G.jokers.cards[2].edition.polychrome))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_astral and G.jokers.cards[2].edition.cry_metallic) or (G.jokers.cards[1].edition.cry_metallic and G.jokers.cards[2].edition.cry_astral))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.brilliant and G.jokers.cards[2].edition.cry_impulsion) or (G.jokers.cards[1].edition.cry_impulsion and G.jokers.cards[2].edition.brilliant))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_catalyst and G.jokers.cards[2].edition.cry_shiny) or (G.jokers.cards[1].edition.cry_shiny and G.jokers.cards[2].edition.cry_catalyst))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_catalyst and G.jokers.cards[2].edition.cry_ultrashiny) or (G.jokers.cards[1].edition.cry_ultrashiny and G.jokers.cards[2].edition.cry_catalyst))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_balavirus and G.jokers.cards[2].edition.cry_psychedelic) or (G.jokers.cards[1].edition.cry_psychedelic and G.jokers.cards[2].edition.cry_balavirus))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_balavirus and G.jokers.cards[2].edition.cry_darkvoid) or (G.jokers.cards[1].edition.cry_darkvoid and G.jokers.cards[2].edition.cry_balavirus))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_balavirus and G.jokers.cards[2].edition.cry_eyesless) or (G.jokers.cards[1].edition.cry_eyesless and G.jokers.cards[2].edition.cry_balavirus))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_balavirus and G.jokers.cards[2].edition.cry_absoluteglitch) or (G.jokers.cards[1].edition.cry_absoluteglitch and G.jokers.cards[2].edition.cry_balavirus))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_balavirus and G.jokers.cards[2].edition.cry_balavirus) or (G.jokers.cards[1].edition.cry_balavirus and G.jokers.cards[2].edition.cry_balavirus))) or (G.jokers.cards[1] and G.jokers.cards[2] and ((G.jokers.cards[1].edition.cry_shiny and G.jokers.cards[2].edition.cry_galvanized) or (G.jokers.cards[1].edition.cry_galvanized and G.jokers.cards[2].edition.cry_shiny))))
     end,
     use = function(self, card, area, copier)

@@ -19,8 +19,8 @@ local itemcard_atlas = {
     object_type = "Atlas",
     key = "itemcardatlas",
     path = "itemcard_atlas.png",
-    px = 64,
-    py = 64
+    px = 71,
+    py = 95
 }
 local greenbeer = {
     object_type = "Consumable",
